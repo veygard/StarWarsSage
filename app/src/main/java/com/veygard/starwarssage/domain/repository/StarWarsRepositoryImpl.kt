@@ -1,8 +1,10 @@
 package com.veygard.starwarssage.domain.repository
 
+import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.domain.response.RequestResult
+import javax.inject.Inject
 
-class StarWarsRepositoryApi(): StarWarsRepository {
+class StarWarsRepositoryImpl@Inject constructor(private val starWarsApi: StarWarsApi) : StarWarsRepository {
 
     override suspend fun getMovies(): RequestResult {
         return RequestResult.ConnectionError()
