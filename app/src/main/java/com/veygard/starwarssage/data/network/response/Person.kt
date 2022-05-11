@@ -1,6 +1,6 @@
 package com.veygard.starwarssage.data.network.response
 
-data class People(
+data class Person(
     val birth_year: String? = null,
     val created: String? = null,
     val edited: String? = null,
