@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_error.xml" value="0.18704710144927536" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_movies.xml" value="0.2740628166160081" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_person.xml" value="0.18704710144927536" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_planet.xml" value="0.18704710144927536" />
       </map>
     </option>
   </component>
