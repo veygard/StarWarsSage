@@ -5,8 +5,8 @@ import com.veygard.starwarssage.data.network.response.Person
 import com.veygard.starwarssage.data.network.response.Planet
 
 
-sealed class RequestResult(open val error: String? = null) {
-    data class Success(val response: ApiResponseType) : RequestResult()
+sealed class RequestResult(open val error: String? = null, open val response: ApiResponseType? = null) {
+    data class Success(override val response: ApiResponseType) : RequestResult(response = response)
     data class ConnectionError(override val error: String? = null) : RequestResult(error = error)
     data class ServerError(override val error: String? = null) : RequestResult(error = error)
     data class EnqueueError(override val error: String? = null) : RequestResult(error = error)
