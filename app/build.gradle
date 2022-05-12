@@ -116,4 +116,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
+    implementation("com.squareup.moshi:moshi:$moshi_version") //моши для перевода list <-> json, room не хранит списки
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
 }

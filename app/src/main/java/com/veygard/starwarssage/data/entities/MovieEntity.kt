@@ -8,18 +8,18 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "movie_table")
 @Parcelize
 data class MovieEntity(
-    val characters: List<String>,
-    val created: String,
-    val director: String,
-    val edited: String,
-    @PrimaryKey(autoGenerate = false)val episode_id: Int,
-    val opening_crawl: String,
-    val planets: List<String>,
-    val producer: String,
-    val release_date: String,
-    val species: List<String>,
-    val starships: List<String>,
-    val title: String,
-    val url: String,
-    val vehicles: List<String>
+    val characters: List<String> ? = null,
+    val created: String ? = null,
+    val director: String ? = null,
+    val edited: String ? = null,
+    val episode_id: Int ? = null,
+    val opening_crawl: String ? = null,
+    val planets: List<String> ? = null,
+    val producer: String ? = null,
+    val release_date: String ? = null,
+    val species: List<String> ? = null,
+    val starships: List<String> ? = null,
+    val title: String ? = null,
+    @PrimaryKey(autoGenerate = false)val url: String,
+    val vehicles: List<String> ? = null,
 ): Parcelable

@@ -4,7 +4,7 @@ buildscript {
         retrofit_version = '2.9.0'
         nav_version = "2.4.1"
         room_version = "2.4.2"
-
+        moshi_version = "1.13.0"
     }
 
     dependencies {
