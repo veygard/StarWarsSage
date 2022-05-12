@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "people_table")
+@Entity(tableName = "planet_table")
 @Parcelize
 data class PlanetEntity(
     val climate: String? = null,
