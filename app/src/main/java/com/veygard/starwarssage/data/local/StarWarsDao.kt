@@ -13,21 +13,21 @@ import com.veygard.starwarssage.data.entities.PlanetEntity
 interface StarWarsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movieEntity: MovieEntity)
+    suspend fun insertMovieDao(movieEntity: MovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlanet(planetEntity: PlanetEntity)
+    suspend fun insertPlanetDao(planetEntity: PlanetEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPerson(personEntity: PersonEntity)
+    suspend fun insertPersonDao(personEntity: PersonEntity)
 
     @Query("SELECT * FROM movie_table ORDER BY episode_id DESC")
-    fun getAllMovies(): LiveData<List<MovieEntity>>
+    fun getAllMoviesDao(): LiveData<List<MovieEntity>>
 
     @Query("SELECT * FROM people_table where url = :url")
-    fun getPerson(url: String): LiveData<PersonEntity>
+    fun getPersonDao(url: String): LiveData<PersonEntity>
 
     @Query("SELECT * FROM planet_table where url = :url")
-    fun getPlanet(url: String): LiveData<PersonEntity>
+    fun getPlanetDao(url: String): LiveData<PersonEntity>
 
 }

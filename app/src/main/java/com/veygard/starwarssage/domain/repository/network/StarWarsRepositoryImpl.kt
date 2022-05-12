@@ -1,4 +1,4 @@
-package com.veygard.starwarssage.domain.repository
+package com.veygard.starwarssage.domain.repository.network
 
 import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi

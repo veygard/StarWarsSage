@@ -1,4 +1,4 @@
-package com.veygard.starwarssage.domain.repository
+package com.veygard.starwarssage.domain.repository.network
 
 import com.veygard.starwarssage.domain.response.RequestResult
 

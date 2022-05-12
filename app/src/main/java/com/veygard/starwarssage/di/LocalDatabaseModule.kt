@@ -23,7 +23,7 @@ object LocalDatabaseModule {
         .build()
 
     @Provides
-    fun provideTaskDao(db: StarWarsDatabase) = db.dao()
-
+    @Singleton
+    fun provideStarWarsDao(starWarsDatabase: StarWarsDatabase) = starWarsDatabase.dao()
 
 }

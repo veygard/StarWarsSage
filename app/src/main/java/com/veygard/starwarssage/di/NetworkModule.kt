@@ -43,7 +43,6 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRemoteClient(): Retrofit {
-
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

@@ -1,8 +1,12 @@
 package com.veygard.starwarssage.di
 
+import com.veygard.starwarssage.data.local.StarWarsDao
+import com.veygard.starwarssage.data.local.StarWarsDatabase
 import com.veygard.starwarssage.data.network.api.StarWarsApi
-import com.veygard.starwarssage.domain.repository.StarWarsRepository
-import com.veygard.starwarssage.domain.repository.StarWarsRepositoryImpl
+import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
+import com.veygard.starwarssage.domain.repository.local.LocalDbRepositoryImpl
+import com.veygard.starwarssage.domain.repository.network.StarWarsRepository
+import com.veygard.starwarssage.domain.repository.network.StarWarsRepositoryImpl
 import com.veygard.starwarssage.domain.use_case.*
 import dagger.Module
 import dagger.Provides
@@ -33,5 +37,11 @@ object DomainModule {
         getPlanetsUseCase = GetPlanetsUseCase(repository = starWarsRepository),
         getPeopleUseCase = GetPeopleUseCase(repository = starWarsRepository)
     )
+
+    @Provides
+    @Singleton
+    fun provideLocalDbRepository(
+        starWarsDao: StarWarsDao
+    ): LocalDbRepository = LocalDbRepositoryImpl(starWarsDao)
 
 }
