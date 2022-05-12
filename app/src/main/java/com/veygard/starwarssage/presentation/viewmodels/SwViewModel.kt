@@ -98,5 +98,19 @@ class SwViewModel @Inject constructor(
         }
     }
 
+    fun getPlanets(){
+       viewModelScope.launch {
+           Log.e("bd_download", "get planets VM start")
+           starWarsUseCases.getPlanetsUseCase.start()
+       }
+    }
+
+    fun getPeople(){
+        viewModelScope.launch {
+            Log.e("bd_download", "get people VM start")
+            starWarsUseCases.getPeopleUseCase.start()
+        }
+    }
+
 
 }

@@ -3,10 +3,7 @@ package com.veygard.starwarssage.di
 import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.domain.repository.StarWarsRepository
 import com.veygard.starwarssage.domain.repository.StarWarsRepositoryImpl
-import com.veygard.starwarssage.domain.use_case.GetMoviesUseCase
-import com.veygard.starwarssage.domain.use_case.GetPersonUseCase
-import com.veygard.starwarssage.domain.use_case.GetPlanetUseCase
-import com.veygard.starwarssage.domain.use_case.StarWarsUseCases
+import com.veygard.starwarssage.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,7 +29,9 @@ object DomainModule {
     ): StarWarsUseCases = StarWarsUseCases(
         getMoviesUseCase = GetMoviesUseCase(repository = starWarsRepository),
         getPersonUseCase = GetPersonUseCase(repository = starWarsRepository),
-        getPlanetUseCase = GetPlanetUseCase(repository = starWarsRepository)
+        getPlanetUseCase = GetPlanetUseCase(repository = starWarsRepository),
+        getPlanetsUseCase = GetPlanetsUseCase(repository = starWarsRepository),
+        getPeopleUseCase = GetPeopleUseCase(repository = starWarsRepository)
     )
 
 }

@@ -58,11 +58,11 @@ class MoviesFragment : Fragment() {
             viewModel.getMovies()
         }
         binding.buttonPerson.setOnClickListener {
-            viewModel.getPerson(1)
+            viewModel.getPeople()
             Log.e("button_click", "person button was clicked")
         }
         binding.buttonPlanet.setOnClickListener {
-            viewModel.getPlanet(1)
+            viewModel.getPlanets()
             Log.e("button_click", "planet button was clicked")
         }
 

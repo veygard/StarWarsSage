@@ -1,8 +1,6 @@
 package com.veygard.starwarssage.domain.response
 
-import com.veygard.starwarssage.data.network.response.GetMoviesResponse
-import com.veygard.starwarssage.data.network.response.Person
-import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.data.network.response.*
 
 
 sealed class RequestResult(open val error: String? = null, open val response: ApiResponseType? = null) {
@@ -14,6 +12,8 @@ sealed class RequestResult(open val error: String? = null, open val response: Ap
 
 sealed class ApiResponseType{
     data class GetMovies(val getMoviesResponse: GetMoviesResponse): ApiResponseType()
+    data class GetPlanets(val getPlanetsResponse: GetPlanetsResponse): ApiResponseType()
+    data class GetPeople(val getPeopleResponse: GetPeopleResponse): ApiResponseType()
     data class GetPerson(val person: Person): ApiResponseType()
     data class GetPlanet(val planet: Planet): ApiResponseType()
 }
