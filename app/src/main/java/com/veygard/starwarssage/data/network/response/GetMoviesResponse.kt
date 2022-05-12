@@ -4,5 +4,5 @@ data class GetMoviesResponse(
     val count: Int? = null,
     val next: Boolean? = null,
     val previous: Boolean? = null,
-    val movies: List<Movie>? = null
+    val results: List<Movie>? = null
 )

@@ -1,5 +1,6 @@
 package com.veygard.starwarssage.presentation.viewmodels
 
+import android.util.Log
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.StarWarsUseCases
@@ -51,7 +52,10 @@ class SwViewModel @Inject constructor(
     fun getPerson(index: Int) {
         viewModelScope.launch {
             _loadingState.value = true
-            when (val result = starWarsUseCases.getPersonUseCase.start(index)) {
+            Log.e("button_click", "person VM started")
+            val result = starWarsUseCases.getPersonUseCase.start(index)
+
+            when (result) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
                     val getPerson= result.response as ApiResponseType.GetPerson

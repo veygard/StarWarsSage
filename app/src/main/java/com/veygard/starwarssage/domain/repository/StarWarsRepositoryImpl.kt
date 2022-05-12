@@ -1,5 +1,6 @@
 package com.veygard.starwarssage.domain.repository
 
+import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
@@ -46,6 +47,7 @@ class StarWarsRepositoryImpl@Inject constructor(private val starWarsApi: StarWar
 
     override suspend fun getPerson(index: Int): RequestResult {
         var result: RequestResult = RequestResult.EnqueueError("StarWarsRepositoryImpl getMovies not working")
+        Log.e("button_click", "getPerson repository start")
         try {
             val call =  starWarsApi.getPersonApi(index)
             when{

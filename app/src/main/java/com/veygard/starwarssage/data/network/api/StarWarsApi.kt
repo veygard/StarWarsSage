@@ -14,12 +14,12 @@ interface StarWarsApi {
         "Content-Type: application/json",
     )
 
-    @GET("/films")
+    @GET("films")
     suspend fun getAllFilmsApi(): Response<GetMoviesResponse>
 
-    @GET("/people/")
+    @GET("people/{id}")
     suspend fun getPersonApi(@Path("id") index:Int): Response<Person>
 
-    @GET("/planet/")
+    @GET("planets/{id}")
     suspend fun getPlanetApi(@Path("id") index:Int): Response<Planet>
 }
