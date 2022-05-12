@@ -22,7 +22,7 @@ interface StarWarsDao {
     suspend fun insertPersonDao(personEntity: PersonEntity)
 
     @Query("SELECT * FROM movie_table ORDER BY episode_id DESC")
-    fun getAllMoviesDao(): LiveData<List<MovieEntity>>
+    suspend fun getAllMoviesDao(): List<MovieEntity>
 
     @Query("SELECT * FROM people_table where url = :url")
     fun getPersonDao(url: String): LiveData<PersonEntity>

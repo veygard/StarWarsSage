@@ -24,8 +24,6 @@ abstract class StarWarsDatabase : RoomDatabase() {
 
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-
-            val dao = database.get().dao()
         }
     }
 }

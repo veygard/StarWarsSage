@@ -1,5 +1,7 @@
 package com.veygard.starwarssage.data.network.response
 
+import com.veygard.starwarssage.data.entities.MovieEntity
+
 data class Movie(
     val characters: List<String>? = null,
     val created: String? = null,
@@ -16,3 +18,22 @@ data class Movie(
     val url: String? = null,
     val vehicles: List<String>? = null
 )
+
+fun Movie.toEntity() = MovieEntity(
+    characters = this.characters,
+    created = this.created,
+    director = this.director,
+    edited = this.edited,
+    episode_id = this.episode_id,
+    opening_crawl = this.opening_crawl,
+    planets = this.planets,
+    producer = this.producer,
+    release_date = this.release_date,
+    species = this.species,
+    starships = this.starships,
+    title = this.title,
+    url = this.url ?: "",
+    vehicles = this.vehicles
+)
+
+fun List<Movie>.toEntityList() = this.map { it.toEntity() }

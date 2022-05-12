@@ -23,19 +23,22 @@ object DomainModule {
     @Provides
     @Singleton
     fun provideMoviesRepository(
-        starWarsApi: StarWarsApi
-    ): StarWarsRepository = StarWarsRepositoryImpl(starWarsApi)
+        starWarsApi: StarWarsApi,
+        localDbRepository: LocalDbRepository
+    ): StarWarsRepository = StarWarsRepositoryImpl(starWarsApi, localDbRepository)
 
     @Provides
     @Singleton
     fun provideUseCases(
         starWarsRepository: StarWarsRepository,
+        localDbRepository: LocalDbRepository
     ): StarWarsUseCases = StarWarsUseCases(
         getMoviesUseCase = GetMoviesUseCase(repository = starWarsRepository),
         getPersonUseCase = GetPersonUseCase(repository = starWarsRepository),
         getPlanetUseCase = GetPlanetUseCase(repository = starWarsRepository),
         getPlanetsUseCase = GetPlanetsUseCase(repository = starWarsRepository),
-        getPeopleUseCase = GetPeopleUseCase(repository = starWarsRepository)
+        getPeopleUseCase = GetPeopleUseCase(repository = starWarsRepository),
+        getLocalMoviesUseCase = GetLocalMoviesUseCase(localDbRepository)
     )
 
     @Provides

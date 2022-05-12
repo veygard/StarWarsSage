@@ -18,8 +18,10 @@ object LocalDatabaseModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-    ) = Room.databaseBuilder(app, StarWarsDatabase::class.java, "task_database")
+        callback: StarWarsDatabase.Callback
+    ) = Room.databaseBuilder(app, StarWarsDatabase::class.java, "star_wars_database")
         .fallbackToDestructiveMigration()
+        .addCallback(callback)
         .build()
 
     @Provides

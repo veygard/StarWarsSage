@@ -1,21 +1,15 @@
 package com.veygard.starwarssage.domain.repository.local
 
-import androidx.lifecycle.LiveData
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.veygard.starwarssage.data.entities.MovieEntity
-import com.veygard.starwarssage.data.entities.PersonEntity
-import com.veygard.starwarssage.data.entities.PlanetEntity
+import com.veygard.starwarssage.data.network.response.Movie
 
 interface LocalDbRepository {
-    suspend fun insertMovies()
+    suspend fun insertMovies(movieList: List<Movie>)
 
     suspend fun insertPlanet()
 
     suspend fun insertPerson()
 
-    fun getAllMovies()
+    suspend fun getAllMovies() : List<Movie>
 
     fun getPerson()
 

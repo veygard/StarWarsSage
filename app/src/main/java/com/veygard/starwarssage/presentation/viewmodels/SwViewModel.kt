@@ -21,19 +21,30 @@ class SwViewModel @Inject constructor(
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
     val viewModelState: LiveData<SwViewModelState?> = _viewModelState
 
+    private val _localState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
+    val localState: LiveData<SwViewModelState?> = _localState
+
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
 
     private val _showToast: MutableLiveData<ToastTypes?> = MutableLiveData(null)
     val showToast: LiveData<ToastTypes?> = _showToast
 
+    fun getLocalMovies() {
+        viewModelScope.launch {
+            val result = starWarsUseCases.getLocalMoviesUseCase.start()
+            _localState.value= SwViewModelState.GotMoviesLocal(result)
+        }
+    }
+
     fun getMovies() {
         viewModelScope.launch {
-            _loadingState.value  = true
+            _loadingState.value = true
             when (val result = starWarsUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
-                    _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
+                    getLocalMovies()
+//                    _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
                 }
 
                 is RequestResult.ConnectionError -> {
@@ -58,7 +69,7 @@ class SwViewModel @Inject constructor(
             when (result) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
-                    val getPerson= result.response as ApiResponseType.GetPerson
+                    val getPerson = result.response as ApiResponseType.GetPerson
                     _viewModelState.value = SwViewModelState.GotPerson(getPerson.person)
                 }
 
@@ -81,7 +92,7 @@ class SwViewModel @Inject constructor(
             when (val result = starWarsUseCases.getPlanetUseCase.start(index)) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
-                    val getPlanet= result.response as ApiResponseType.GetPlanet
+                    val getPlanet = result.response as ApiResponseType.GetPlanet
                     _viewModelState.value = SwViewModelState.GotPlanet(getPlanet.planet)
                 }
 
@@ -98,14 +109,14 @@ class SwViewModel @Inject constructor(
         }
     }
 
-    fun getPlanets(){
-       viewModelScope.launch {
-           Log.e("bd_download", "get planets VM start")
-           starWarsUseCases.getPlanetsUseCase.start()
-       }
+    fun getPlanets() {
+        viewModelScope.launch {
+            Log.e("bd_download", "get planets VM start")
+            starWarsUseCases.getPlanetsUseCase.start()
+        }
     }
 
-    fun getPeople(){
+    fun getPeople() {
         viewModelScope.launch {
             Log.e("bd_download", "get people VM start")
             starWarsUseCases.getPeopleUseCase.start()

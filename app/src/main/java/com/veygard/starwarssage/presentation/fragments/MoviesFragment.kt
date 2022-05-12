@@ -37,7 +37,14 @@ class MoviesFragment : Fragment() {
                 is SwViewModelState.GotPlanet -> {
                     binding.textView.text = "planet ${result.planet.name}"
                 }
+            }
+        }
 
+        viewModel.localState.addObserver { result ->
+            when(result){
+                is SwViewModelState.GotMoviesLocal -> {
+                    binding.textView.text = "movies count Local: ${result.list.size}"
+                }
             }
 
         }
@@ -66,6 +73,10 @@ class MoviesFragment : Fragment() {
             Log.e("button_click", "planet button was clicked")
         }
 
+        binding.buttonLocal.setOnClickListener {
+            viewModel.getLocalMovies()
+            Log.e("button_click", "local button was clicked")
+        }
     }
 
     override fun onDestroy() {

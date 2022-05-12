@@ -4,11 +4,12 @@ import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.data.network.response.Person
 import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import javax.inject.Inject
 
-class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWarsApi) :
+class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWarsApi, private val localDbRepository: LocalDbRepository) :
     StarWarsRepository {
 
     override suspend fun getMovies(): RequestResult {
@@ -19,6 +20,9 @@ class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWa
             when {
                 call.isSuccessful -> {
                     call.body()?.let {
+
+                        it.results?.let{ localDbRepository.insertMovies(it)}
+
                         result = RequestResult.Success(ApiResponseType.GetMovies(it))
                     } ?: run {
                         result = RequestResult.ServerError(

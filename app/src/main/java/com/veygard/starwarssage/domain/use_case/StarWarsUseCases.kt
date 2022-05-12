@@ -5,5 +5,6 @@ data class StarWarsUseCases(
     val getPersonUseCase: GetPersonUseCase,
     val getPlanetUseCase: GetPlanetUseCase,
     val getPlanetsUseCase: GetPlanetsUseCase,
-    val getPeopleUseCase: GetPeopleUseCase
+    val getPeopleUseCase: GetPeopleUseCase,
+    val getLocalMoviesUseCase: GetLocalMoviesUseCase
 )

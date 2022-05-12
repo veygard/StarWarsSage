@@ -3,6 +3,7 @@ package com.veygard.starwarssage.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.veygard.starwarssage.data.network.response.Movie
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "movie_table")
@@ -23,3 +24,22 @@ data class MovieEntity(
     @PrimaryKey(autoGenerate = false)val url: String,
     val vehicles: List<String> ? = null,
 ): Parcelable
+
+fun MovieEntity.toDomain() = Movie(
+    characters = this.characters,
+    created = this.created,
+    director = this.director,
+    edited = this.edited,
+    episode_id = this.episode_id,
+    opening_crawl = this.opening_crawl,
+    planets = this.planets,
+    producer = this.producer,
+    release_date = this.release_date,
+    species = this.species,
+    starships = this.starships,
+    title = this.title,
+    url = this.url ?: "",
+    vehicles = this.vehicles
+)
+
+fun List<MovieEntity>.toDomainList() = this.map { it.toDomain() }
