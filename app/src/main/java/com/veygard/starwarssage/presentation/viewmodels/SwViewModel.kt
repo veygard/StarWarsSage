@@ -1,6 +1,7 @@
 package com.veygard.starwarssage.presentation.viewmodels
 
 import android.util.Log
+import com.veygard.starwarssage.data.network.response.Movie
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.StarWarsUseCases
@@ -30,21 +31,28 @@ class SwViewModel @Inject constructor(
     private val _showToast: MutableLiveData<ToastTypes?> = MutableLiveData(null)
     val showToast: LiveData<ToastTypes?> = _showToast
 
-    fun getLocalMovies() {
+    fun getMovies(){
         viewModelScope.launch {
-            val result = starWarsUseCases.getLocalMoviesUseCase.start()
-            _localState.value= SwViewModelState.GotMoviesLocal(result)
+            val result = getLocalMovies()
+            when {
+                result.isEmpty() -> getMoviesFromServer()
+                result.isNotEmpty() -> {
+                    _localState.value = SwViewModelState.GotMoviesLocal(result)
+                }
+            }
         }
     }
+    suspend fun getLocalMovies(): List<Movie> {
+        return starWarsUseCases.getLocalMoviesUseCase.start()
+    }
 
-    fun getMovies() {
+    fun getMoviesFromServer() {
         viewModelScope.launch {
             _loadingState.value = true
             when (val result = starWarsUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
-                    getLocalMovies()
-//                    _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
+                    _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
                 }
 
                 is RequestResult.ConnectionError -> {

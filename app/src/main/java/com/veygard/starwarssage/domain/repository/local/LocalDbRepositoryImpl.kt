@@ -2,10 +2,7 @@ package com.veygard.starwarssage.domain.repository.local
 
 import com.veygard.starwarssage.data.entities.toDomainList
 import com.veygard.starwarssage.data.local.StarWarsDao
-import com.veygard.starwarssage.data.network.response.Movie
-import com.veygard.starwarssage.data.network.response.Person
-import com.veygard.starwarssage.data.network.response.Planet
-import com.veygard.starwarssage.data.network.response.toEntityList
+import com.veygard.starwarssage.data.network.response.*
 import javax.inject.Inject
 
 class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: StarWarsDao) : LocalDbRepository {
@@ -17,11 +14,11 @@ class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: St
     }
 
     override suspend fun insertPlanet(planet: Planet) {
-//        starWarsDatabase.insertPlanetDao()
+        starWarsDatabase.insertPlanetDao(planet.toEntity())
     }
 
     override suspend fun insertPerson(person: Person) {
-
+        starWarsDatabase.insertPersonDao(person.toEntity())
     }
 
     override suspend fun getAllMovies(): List<Movie> {

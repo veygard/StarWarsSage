@@ -1,12 +1,11 @@
 package com.veygard.starwarssage.di
 
 import com.veygard.starwarssage.data.local.StarWarsDao
-import com.veygard.starwarssage.data.local.StarWarsDatabase
 import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepositoryImpl
-import com.veygard.starwarssage.domain.repository.network.StarWarsRepository
-import com.veygard.starwarssage.domain.repository.network.StarWarsRepositoryImpl
+import com.veygard.starwarssage.domain.repository.network.NetworkRepository
+import com.veygard.starwarssage.domain.repository.network.NetworkRepositoryImpl
 import com.veygard.starwarssage.domain.use_case.*
 import dagger.Module
 import dagger.Provides
@@ -25,19 +24,19 @@ object DomainModule {
     fun provideMoviesRepository(
         starWarsApi: StarWarsApi,
         localDbRepository: LocalDbRepository
-    ): StarWarsRepository = StarWarsRepositoryImpl(starWarsApi, localDbRepository)
+    ): NetworkRepository = NetworkRepositoryImpl(starWarsApi, localDbRepository)
 
     @Provides
     @Singleton
     fun provideUseCases(
-        starWarsRepository: StarWarsRepository,
+        networkRepository: NetworkRepository,
         localDbRepository: LocalDbRepository
     ): StarWarsUseCases = StarWarsUseCases(
-        getMoviesUseCase = GetMoviesUseCase(repository = starWarsRepository),
-        getPersonUseCase = GetPersonUseCase(repository = starWarsRepository),
-        getPlanetUseCase = GetPlanetUseCase(repository = starWarsRepository),
-        getPlanetsUseCase = GetPlanetsUseCase(repository = starWarsRepository),
-        getPeopleUseCase = GetPeopleUseCase(repository = starWarsRepository),
+        getMoviesUseCase = GetMoviesUseCase(repository = networkRepository),
+        getPersonUseCase = GetPersonUseCase(repository = networkRepository),
+        getPlanetUseCase = GetPlanetUseCase(repository = networkRepository),
+        getPlanetsUseCase = GetPlanetsUseCase(repository = networkRepository),
+        getPeopleUseCase = GetPeopleUseCase(repository = networkRepository),
         getLocalMoviesUseCase = GetLocalMoviesUseCase(localDbRepository)
     )
 

@@ -12,7 +12,5 @@ sealed class SwViewModelState {
     data class GotMoviesLocal(val list: List<Movie> ): SwViewModelState()
     data class GotPerson(val person: Person): SwViewModelState()
     data class GotPlanet(val planet: Planet): SwViewModelState()
-    object MoreMoviesError: SwViewModelState()
     data class Error(val result: RequestResult, val msg:String?): SwViewModelState()
-    object Loading: SwViewModelState()
 }

@@ -22,6 +22,7 @@ class MoviesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getMovies()
         observeData()
     }
 
@@ -29,7 +30,7 @@ class MoviesFragment : Fragment() {
         viewModel.viewModelState.addObserver { result ->
             when(result){
                 is SwViewModelState.GotMovies -> {
-                    binding.textView.text = "movies count: ${result.getMovies.getMoviesResponse.results?.size.toString()}"
+                    binding.textView.text = "movies server count: ${result.getMovies.getMoviesResponse.results?.size.toString()}"
                 }
                 is SwViewModelState.GotPerson -> {
                     binding.textView.text = "person ${result.person.name}"
@@ -62,7 +63,7 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonMovies.setOnClickListener {
-            viewModel.getMovies()
+            viewModel.getMoviesFromServer()
         }
         binding.buttonPerson.setOnClickListener {
             viewModel.getPeople()
@@ -74,7 +75,6 @@ class MoviesFragment : Fragment() {
         }
 
         binding.buttonLocal.setOnClickListener {
-            viewModel.getLocalMovies()
             Log.e("button_click", "local button was clicked")
         }
     }

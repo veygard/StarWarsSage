@@ -9,8 +9,8 @@ import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import javax.inject.Inject
 
-class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWarsApi, private val localDbRepository: LocalDbRepository) :
-    StarWarsRepository {
+class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWarsApi, private val localDbRepository: LocalDbRepository) :
+    NetworkRepository {
 
     override suspend fun getMovies(): RequestResult {
         var result: RequestResult =
@@ -115,6 +115,7 @@ class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWa
                 call.isSuccessful -> {
                     call.body()?.let {
                         result = RequestResult.Success(ApiResponseType.GetPlanet(it))
+
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
@@ -167,6 +168,10 @@ class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWa
 
                             call.body()?.results?.let {
                                 planetList.addAll(it)
+                                it.forEach { planet->
+                                    localDbRepository.insertPlanet(planet)
+                                }
+
                             }
                             Log.e("bd_download", "planet list size: ${planetList.size}")
 
@@ -207,6 +212,9 @@ class StarWarsRepositoryImpl @Inject constructor(private val starWarsApi: StarWa
 
                             call.body()?.results?.let {
                                 personList.addAll(it)
+                                it.forEach { person->
+                                    localDbRepository.insertPerson(person)
+                                }
                             }
                             Log.e("bd_download", "personList size: ${personList.size}")
 
