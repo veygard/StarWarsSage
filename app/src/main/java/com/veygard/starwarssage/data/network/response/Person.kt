@@ -1,5 +1,7 @@
 package com.veygard.starwarssage.data.network.response
 
+import com.veygard.starwarssage.data.entities.PersonEntity
+
 data class Person(
     val birth_year: String? = null,
     val created: String? = null,
@@ -17,4 +19,23 @@ data class Person(
     val starships: List<String>? = null,
     val url: String? = null,
     val vehicles: List<String>? = null
+)
+
+fun Person.toEntity() = PersonEntity(
+    birth_year = this.birth_year,
+    created = this.created,
+    edited = this.edited,
+    eye_color = this.eye_color,
+    films = this.films,
+    gender = this.gender,
+    hair_color = this.hair_color,
+    height = this.height,
+    homeworld = this.homeworld,
+    mass = this.mass,
+    name = this.name,
+    skin_color = this.skin_color,
+    species = this.species,
+    starships = this.starships,
+    url = this.url ?: "",
+    vehicles = this.vehicles
 )

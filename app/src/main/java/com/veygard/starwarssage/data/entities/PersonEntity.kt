@@ -3,6 +3,7 @@ package com.veygard.starwarssage.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.veygard.starwarssage.data.network.response.Person
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "people_table")
@@ -25,3 +26,22 @@ data class PersonEntity(
     @PrimaryKey(autoGenerate = false)val url: String,
     val vehicles: List<String>? = null
 ): Parcelable
+
+fun PersonEntity.toDomain() = Person(
+    birth_year = this.birth_year,
+    created = this.created,
+    edited = this.edited,
+    eye_color = this.eye_color,
+    films = this.films,
+    gender = this.gender,
+    hair_color = this.hair_color,
+    height = this.height,
+    homeworld = this.homeworld,
+    mass = this.mass,
+    name = this.name,
+    skin_color = this.skin_color,
+    species = this.species,
+    starships = this.starships,
+    url = this.url ?: "",
+    vehicles = this.vehicles
+)

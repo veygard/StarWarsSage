@@ -3,6 +3,8 @@ package com.veygard.starwarssage.domain.repository.local
 import com.veygard.starwarssage.data.entities.toDomainList
 import com.veygard.starwarssage.data.local.StarWarsDao
 import com.veygard.starwarssage.data.network.response.Movie
+import com.veygard.starwarssage.data.network.response.Person
+import com.veygard.starwarssage.data.network.response.Planet
 import com.veygard.starwarssage.data.network.response.toEntityList
 import javax.inject.Inject
 
@@ -14,18 +16,16 @@ class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: St
         }
     }
 
-    override suspend fun insertPlanet() {
-
+    override suspend fun insertPlanet(planet: Planet) {
+//        starWarsDatabase.insertPlanetDao()
     }
 
-    override suspend fun insertPerson() {
+    override suspend fun insertPerson(person: Person) {
 
     }
 
     override suspend fun getAllMovies(): List<Movie> {
-        val l = starWarsDatabase.getAllMoviesDao().toDomainList() ?: emptyList()
-        val e = 5
-        return l
+        return starWarsDatabase.getAllMoviesDao().toDomainList()
     }
 
     override fun getPerson() {

@@ -3,6 +3,7 @@ package com.veygard.starwarssage.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.veygard.starwarssage.data.network.response.Planet
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "planet_table")
@@ -23,3 +24,20 @@ data class PlanetEntity(
     val terrain: String? = null,
     @PrimaryKey(autoGenerate = false)val url: String
 ): Parcelable
+
+fun PlanetEntity.toDomain() = Planet(
+    climate = climate,
+    created = created,
+    diameter = diameter,
+    edited = edited,
+    films = films,
+    gravity = gravity,
+    name = name,
+    orbital_period = orbital_period,
+    population = population,
+    residents = residents,
+    rotation_period = rotation_period,
+    surface_water = surface_water,
+    terrain = terrain,
+    url = url
+)
