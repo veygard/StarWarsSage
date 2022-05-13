@@ -1,8 +1,9 @@
 package com.veygard.starwarssage.domain.repository.local
 
-import com.veygard.starwarssage.data.network.response.Movie
-import com.veygard.starwarssage.data.network.response.Person
-import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.domain.model.Movie
+import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.Planet
+
 
 interface LocalDbRepository {
     suspend fun insertMovies(movieList: List<Movie>)

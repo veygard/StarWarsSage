@@ -1,7 +1,7 @@
 package com.veygard.starwarssage.presentation.viewmodels
 
 import android.util.Log
-import com.veygard.starwarssage.data.network.response.Movie
+import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.StarWarsUseCases

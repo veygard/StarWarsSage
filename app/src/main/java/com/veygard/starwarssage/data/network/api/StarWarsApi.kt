@@ -1,6 +1,8 @@
 package com.veygard.starwarssage.data.network.api
 
 import com.veygard.starwarssage.data.network.response.*
+import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.Planet
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

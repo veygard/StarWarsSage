@@ -1,9 +1,8 @@
 package com.veygard.starwarssage.presentation.viewmodels
 
-import com.veygard.starwarssage.data.network.response.GetMoviesResponse
-import com.veygard.starwarssage.data.network.response.Movie
-import com.veygard.starwarssage.data.network.response.Person
-import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.domain.model.Movie
+import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.Planet
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 

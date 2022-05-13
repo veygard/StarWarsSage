@@ -1,4 +1,4 @@
-package com.veygard.starwarssage.data.network.response
+package com.veygard.starwarssage.domain.model
 
 import com.veygard.starwarssage.data.entities.PersonEntity
 

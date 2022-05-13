@@ -3,7 +3,7 @@ package com.veygard.starwarssage.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.veygard.starwarssage.data.network.response.Movie
+import com.veygard.starwarssage.domain.model.Movie
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "movie_table")

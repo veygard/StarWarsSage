@@ -1,7 +1,5 @@
 package com.veygard.starwarssage.di
 
-import android.os.SystemClock
-import android.provider.SyncStateContract
 import com.veygard.starwarssage.data.network.api.StarWarsApi
 import com.veygard.starwarssage.util.Constants.BASE_URL
 import dagger.Module
@@ -11,10 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
-import okhttp3.HttpUrl
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

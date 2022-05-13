@@ -1,6 +1,8 @@
 package com.veygard.starwarssage.domain.response
 
 import com.veygard.starwarssage.data.network.response.*
+import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.Planet
 
 
 sealed class RequestResult(open val error: String? = null, open val response: ApiResponseType? = null) {

@@ -1,5 +1,7 @@
 package com.veygard.starwarssage.data.network.response
 
+import com.veygard.starwarssage.domain.model.Person
+
 data class GetPeopleResponse(
     val count: Int,
     val next: String,

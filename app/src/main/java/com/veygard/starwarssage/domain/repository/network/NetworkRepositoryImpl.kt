@@ -2,8 +2,8 @@ package com.veygard.starwarssage.domain.repository.network
 
 import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi
-import com.veygard.starwarssage.data.network.response.Person
-import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.Planet
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult

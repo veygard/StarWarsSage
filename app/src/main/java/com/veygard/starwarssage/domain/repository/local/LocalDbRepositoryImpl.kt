@@ -2,7 +2,7 @@ package com.veygard.starwarssage.domain.repository.local
 
 import com.veygard.starwarssage.data.entities.toDomainList
 import com.veygard.starwarssage.data.local.StarWarsDao
-import com.veygard.starwarssage.data.network.response.*
+import com.veygard.starwarssage.domain.model.*
 import javax.inject.Inject
 
 class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: StarWarsDao) : LocalDbRepository {

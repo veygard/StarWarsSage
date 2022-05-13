@@ -3,7 +3,7 @@ package com.veygard.starwarssage.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.veygard.starwarssage.data.network.response.Planet
+import com.veygard.starwarssage.domain.model.Planet
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "planet_table")

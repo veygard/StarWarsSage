@@ -2,7 +2,6 @@ package com.veygard.starwarssage.di
 
 import android.app.Application
 import androidx.room.Room
-import com.veygard.starwarssage.data.local.StarWarsDao
 import com.veygard.starwarssage.data.local.StarWarsDatabase
 import dagger.Module
 import dagger.Provides
