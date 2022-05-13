@@ -1,9 +1,11 @@
 package com.veygard.starwarssage.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -33,9 +35,11 @@ class MoviesFragment : Fragment(), MovieClickInterface {
         viewModel.viewModelState.addObserver { result ->
             when (result) {
                 is SwViewModelState.GotMovies -> {
+                    Log.e("get_movies", "observer got movies")
                     setupMovieRecycler(result.list)
                 }
                 is SwViewModelState.GotMoviesLocal -> {
+                    Log.e("get_movies", "observer local got movies")
                     setupMovieRecycler(result.list)
                 }
                 is SwViewModelState.Error -> {}
@@ -73,7 +77,8 @@ class MoviesFragment : Fragment(), MovieClickInterface {
         _binding = null
     }
 
-    override fun onUserClick() {
+    override fun onMovieClick() {
+        Toast.makeText(requireContext(), "movie click", Toast.LENGTH_SHORT).show()
     }
 
 }

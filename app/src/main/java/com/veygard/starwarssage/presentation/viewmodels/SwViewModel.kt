@@ -31,7 +31,7 @@ class SwViewModel @Inject constructor(
     private val _showToast: MutableLiveData<ToastTypes?> = MutableLiveData(null)
     val showToast: LiveData<ToastTypes?> = _showToast
 
-    fun getMovies(){
+    fun getMovies() {
         viewModelScope.launch {
             val result = getLocalMovies()
             when {
@@ -42,6 +42,7 @@ class SwViewModel @Inject constructor(
             }
         }
     }
+
     suspend fun getLocalMovies(): List<Movie> {
         return localUseCases.getLocalMoviesUseCase.start()
     }
@@ -54,8 +55,17 @@ class SwViewModel @Inject constructor(
                     _loadingState.value = false
                     (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
                         _viewModelState.value = SwViewModelState.GotMovies(it)
-                    } ?: run{  _viewModelState.value = SwViewModelState.Error(RequestResult.NoMoviesError("don't have movies"))}
+                        Log.e("get_movies", "state got list ")
+                    } ?: run {
+                        Log.e("get_movies", "state got error")
+                        _viewModelState.value =
+                            SwViewModelState.Error(RequestResult.NoMoviesError("don't have movies"))
+                    }
 
+                    Log.e("get_movies", "state ended ")
+
+                    networkUseCases.getPlanetsUseCase.start()
+                    networkUseCases.getPeopleUseCase.start()
                 }
 
                 is RequestResult.ConnectionError -> {
@@ -127,13 +137,13 @@ class SwViewModel @Inject constructor(
         }
     }
 
-    fun getLocalPerson(url:String) {
+    fun getLocalPerson(url: String) {
         viewModelScope.launch {
             localUseCases.getLocalPersonUseCase.start(url)
         }
     }
 
-    fun getLocalPlanet(url:String) {
+    fun getLocalPlanet(url: String) {
         viewModelScope.launch {
             localUseCases.getLocalPlanetUseCase.start(url)
         }

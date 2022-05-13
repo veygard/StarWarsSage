@@ -2,8 +2,6 @@ package com.veygard.starwarssage.domain.repository.network
 
 import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi
-import com.veygard.starwarssage.domain.model.Person
-import com.veygard.starwarssage.domain.model.Planet
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
@@ -25,9 +23,8 @@ class NetworkRepositoryImpl @Inject constructor(
                     call.body()?.let {
 
                         it.results?.let { localDbRepository.insertMovies(it) }
-                        getPeople()
-                        getPlanets()
                         result = RequestResult.Success(ApiResponseType.GetMovies(it))
+
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
@@ -119,7 +116,6 @@ class NetworkRepositoryImpl @Inject constructor(
                 call.isSuccessful -> {
                     call.body()?.let {
                         result = RequestResult.Success(ApiResponseType.GetPlanet(it))
-
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
@@ -156,7 +152,7 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     /*todo тут должно быть что-то на rxJava, но не умею*/
-    override suspend fun getPlanets() {
+    override suspend fun downloadPlanets() {
         var pageCounter = 0
         var gotMorePages = true
         try {
@@ -196,7 +192,7 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     /*todo тут должно быть что-то на rxJava, но не умею*/
-    override suspend fun getPeople() {
+    override suspend fun downloadPeople() {
         var pageCounter = 0
         var gotMorePages = true
 

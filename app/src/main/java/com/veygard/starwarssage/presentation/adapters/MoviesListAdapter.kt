@@ -69,6 +69,7 @@ class MoviesListAdapter(private val moviesList: List<Movie>, private val movieCl
 
 
         override fun onClick(p0: View?) {
+            movieClick?.onMovieClick()
         }
     }
 }
