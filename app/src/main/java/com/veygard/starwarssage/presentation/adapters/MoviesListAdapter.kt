@@ -39,17 +39,32 @@ class MoviesListAdapter(private val moviesList: List<Movie>, private val movieCl
 
         @SuppressLint("SetTextI18n")
         fun bind(movie: Movie) {
+            binding.apply {
 
-            binding.root.setOnClickListener(this)
-            binding.movieItemTitle.text = movie.title
-            binding.movieItemDirector.text = context.getString(R.string.movie_item_director,movie.director)
-            binding.movieItemEpisode.text = context.getString(R.string.movie_item_episode, movie.episode_id)
-            binding.movieItemProducer.text = context.getString(R.string.movie_item_producer, movie.producer)
-            binding.movieItemRelease.text = context.getString(R.string.movie_item_release, movie.release_date)
-            binding.movieItemText.text = movie.opening_crawl?.replace("\n", "")?.replace("\r", " ")
+                root.setOnClickListener(this@MovieViewHolder)
+                movieItemTitle.text = movie.title
+                movieItemDirector.text = context.getString(R.string.movie_item_director,movie.director)
+                movieItemEpisode.text = context.getString(R.string.movie_item_episode, movie.episode_id)
+                movieItemProducer.text = context.getString(R.string.movie_item_producer, movie.producer)
+                movieItemRelease.text = context.getString(R.string.movie_item_release, movie.release_date)
+                movieItemText.text = movie.opening_crawl?.replace("\n", "")?.replace("\r", " ")
 
+                getPoster(movie.episode_id)?.let {
+                    movieItemPoster.setImageResource(it)
+                    movieImageFull.setImageResource(it)
+                }
+                movieItemPoster.setOnClickListener {
+                    movieImageFull.visibility= View.VISIBLE
+                    movieLinearContainer.visibility = View.INVISIBLE
+                    movieImageFull.positionAnimator.enter(movieItemPoster, true)
+                }
+                movieImageFull.setOnClickListener {
+                    movieImageFull.positionAnimator.exit(true)
+                    movieImageFull.visibility= View.GONE
+                    movieLinearContainer.visibility = View.VISIBLE
+                }
+            }
 
-            getPoster(movie.episode_id)?.let { binding.movieItemPoster.setImageResource(it) }
         }
 
 

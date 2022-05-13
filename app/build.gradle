@@ -119,4 +119,6 @@ dependencies {
     implementation("com.squareup.moshi:moshi:$moshi_version") //моши для перевода list <-> json, room не хранит списки
     ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
     implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+
+    implementation 'com.alexvasilkov:gesture-views:2.8.3'
 }
