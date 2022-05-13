@@ -126,12 +126,22 @@ class SwViewModel @Inject constructor(
         }
     }
 
+    fun getLocalPerson(url:String) {
+        viewModelScope.launch {
+            localUseCases.getLocalPersonUseCase.start(url)
+        }
+    }
+
+    fun getLocalPlanet(url:String) {
+        viewModelScope.launch {
+            localUseCases.getLocalPlanetUseCase.start(url)
+        }
+    }
+
     fun getPeople() {
         viewModelScope.launch {
             Log.e("bd_download", "get people VM start")
             networkUseCases.getPeopleUseCase.start()
         }
     }
-
-
 }
