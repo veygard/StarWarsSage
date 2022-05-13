@@ -6,6 +6,6 @@
     <string name="cancel_button_title">Отмена</string>
     <string name="movie_item_director">Режиссёр: %1$s</string>
     <string name="movie_item_producer">Продюсер(ы): %1$s</string>
-    <string name="movie_item_release">(%1$s)</string>
+    <string name="movie_item_release">Премьера: %1$s</string>
     <string name="movie_item_episode">Эпизод: %1$d</string>
 </resources>

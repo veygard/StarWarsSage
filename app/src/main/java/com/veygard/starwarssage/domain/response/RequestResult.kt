@@ -7,6 +7,7 @@ import com.veygard.starwarssage.domain.model.Planet
 
 sealed class RequestResult(open val error: String? = null, open val response: ApiResponseType? = null) {
     data class Success(override val response: ApiResponseType) : RequestResult(response = response)
+    data class NoMoviesError(override val error: String? = null) : RequestResult(error = error)
     data class ConnectionError(override val error: String? = null) : RequestResult(error = error)
     data class ServerError(override val error: String? = null) : RequestResult(error = error)
     data class EnqueueError(override val error: String? = null) : RequestResult(error = error)

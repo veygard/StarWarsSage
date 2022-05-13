@@ -7,9 +7,9 @@ import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 
 sealed class SwViewModelState {
-    data class GotMovies(val getMovies: ApiResponseType.GetMovies ): SwViewModelState()
+    data class GotMovies(val list: List<Movie> ): SwViewModelState()
     data class GotMoviesLocal(val list: List<Movie> ): SwViewModelState()
     data class GotPerson(val person: Person): SwViewModelState()
     data class GotPlanet(val planet: Planet): SwViewModelState()
-    data class Error(val result: RequestResult, val msg:String?): SwViewModelState()
+    data class Error(val result: RequestResult): SwViewModelState()
 }

@@ -1,24 +1,27 @@
 package com.veygard.starwarssage.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.veygard.starwarssage.databinding.FragmentMoviesBinding
+import com.veygard.starwarssage.domain.model.Movie
+import com.veygard.starwarssage.presentation.adapters.MoviesListAdapter
+import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(), MovieClickInterface {
 
     private var _binding: FragmentMoviesBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SwViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,24 +31,18 @@ class MoviesFragment : Fragment() {
 
     private fun observeData() {
         viewModel.viewModelState.addObserver { result ->
-            when(result){
+            when (result) {
                 is SwViewModelState.GotMovies -> {
+                    setupMovieRecycler(result.list)
                 }
-                is SwViewModelState.GotPerson -> {
-                }
-                is SwViewModelState.GotPlanet -> {
-                }
-            }
-        }
-
-        viewModel.localState.addObserver { result ->
-            when(result){
                 is SwViewModelState.GotMoviesLocal -> {
+                    setupMovieRecycler(result.list)
                 }
+                is SwViewModelState.Error -> {}
             }
-
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,9 +57,23 @@ class MoviesFragment : Fragment() {
 
     }
 
+    private fun setupMovieRecycler(results: List<Movie>?) {
+        binding.movieRecyclerHolder.also {
+            val adapter = MoviesListAdapter(moviesList = results ?: emptyList(), this, requireContext())
+            it.adapter= adapter
+            it.layoutManager= LinearLayoutManager(requireContext())
+            val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
+            it.addItemDecoration(decoration)
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onUserClick() {
     }
 
 }

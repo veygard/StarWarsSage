@@ -5,109 +5,113 @@
         android:layout_width="match_parent"
         android:id="@+id/movie_card_container"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded"
         app:cardCornerRadius="16dp"
         android:layout_margin="8dp"
         android:elevation="4dp"
         android:layout_centerHorizontal="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                tools:srcCompat="@tools:sample/avatars"
-                android:id="@+id/movie_item_poster"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <TextView
                 android:textSize="24sp"
                 android:textStyle="bold"
                 style="@style/Theme.StarWarsSage"
                 tools:text="@tools:sample/lorem"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
                 android:id="@+id/movie_item_title"
-                app:layout_constraintTop_toBottomOf="@+id/movie_item_poster"
-                app:layout_constraintStart_toStartOf="@+id/movie_item_poster"
-                app:layout_constraintEnd_toEndOf="@+id/movie_item_poster"
+                android:layout_marginTop="16dp" />
+
+        <TextView
+                android:text="@string/movie_item_episode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textAlignment="center"
+                style="@style/Theme.StarWarsSage"
+                android:id="@+id/movie_item_episode"
                 android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginStart="8dp" />
+
+
+        <LinearLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:layout_weight="1"
+                    android:id="@+id/movie_item_poster"
+                    android:contentDescription="poster"
+                    tools:ignore="HardcodedText,ImageContrastCheck"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp" />
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:text="@string/movie_item_director"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="italic"
+                        style="@style/Theme.StarWarsSage"
+                        android:id="@+id/movie_item_director"
+                        android:layout_marginStart="8dp"
+                        />
+
+                <TextView
+                        android:text="@string/movie_item_producer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="italic"
+                        style="@style/Theme.StarWarsSage"
+                        android:id="@+id/movie_item_producer"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp" />
+                <TextView
+                        android:text="@string/movie_item_release"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="italic"
+                        style="@style/Theme.StarWarsSage"
+                        android:id="@+id/movie_item_release"
+                        app:layout_constraintTop_toBottomOf="@+id/movie_item_title"
+                        app:layout_constraintStart_toStartOf="@+id/movie_item_title"
+                        app:layout_constraintEnd_toEndOf="@+id/movie_item_title"
+                        android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
                 android:textSize="14sp"
                 style="@style/Theme.StarWarsSage"
                 tools:text="@tools:sample/lorem/random"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/movie_item_text"
-                app:layout_constraintEnd_toEndOf="@+id/movie_item_poster"
-                app:layout_constraintStart_toStartOf="@+id/movie_item_poster"
-                android:layout_marginStart="4dp"
                 android:paddingBottom="16dp"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintTop_toBottomOf="@+id/movie_item_producer"
-                android:layout_marginTop="16dp" />
-
-        <TextView
-                android:text="@string/movie_item_director"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                style="@style/Theme.StarWarsSage"
-                android:id="@+id/movie_item_director"
-                app:layout_constraintTop_toBottomOf="@+id/movie_item_title"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="4dp" />
-
-        <TextView
-                android:text="@string/movie_item_episode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                style="@style/Theme.StarWarsSage"
-                android:id="@+id/movie_item_episode"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintTop_toTopOf="@+id/movie_item_director"
-                app:layout_constraintBottom_toBottomOf="@+id/movie_item_director" />
-
-        <TextView
-                android:text="@string/movie_item_producer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                style="@style/Theme.StarWarsSage"
-                android:id="@+id/movie_item_producer"
-                app:layout_constraintTop_toBottomOf="@+id/movie_item_director"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@+id/movie_item_director" />
-
-        <TextView
-                android:text="@string/movie_item_release"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="italic"
-                style="@style/Theme.StarWarsSage"
-                android:id="@+id/movie_item_release"
-                app:layout_constraintStart_toEndOf="@+id/movie_item_title"
-                app:layout_constraintBottom_toBottomOf="@+id/movie_item_title"
                 android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@+id/movie_item_title" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                />
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

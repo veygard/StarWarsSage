@@ -24,8 +24,6 @@ class SwViewModel @Inject constructor(
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
     val viewModelState: LiveData<SwViewModelState?> = _viewModelState
 
-    private val _localState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
-    val localState: LiveData<SwViewModelState?> = _localState
 
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
@@ -39,7 +37,7 @@ class SwViewModel @Inject constructor(
             when {
                 result.isEmpty() -> getMoviesFromServer()
                 result.isNotEmpty() -> {
-                    _localState.value = SwViewModelState.GotMoviesLocal(result)
+                    _viewModelState.value = SwViewModelState.GotMoviesLocal(result)
                 }
             }
         }
@@ -54,7 +52,10 @@ class SwViewModel @Inject constructor(
             when (val result = networkUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
-                    _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
+                    (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
+                        _viewModelState.value = SwViewModelState.GotMovies(it)
+                    } ?: run{  _viewModelState.value = SwViewModelState.Error(RequestResult.NoMoviesError("don't have movies"))}
+
                 }
 
                 is RequestResult.ConnectionError -> {
