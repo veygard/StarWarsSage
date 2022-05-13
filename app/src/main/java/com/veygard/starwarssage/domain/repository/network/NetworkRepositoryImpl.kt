@@ -9,7 +9,10 @@ import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import javax.inject.Inject
 
-class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWarsApi, private val localDbRepository: LocalDbRepository) :
+class NetworkRepositoryImpl @Inject constructor(
+    private val starWarsApi: StarWarsApi,
+    private val localDbRepository: LocalDbRepository
+) :
     NetworkRepository {
 
     override suspend fun getMovies(): RequestResult {
@@ -21,8 +24,9 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
                 call.isSuccessful -> {
                     call.body()?.let {
 
-                        it.results?.let{ localDbRepository.insertMovies(it)}
-
+                        it.results?.let { localDbRepository.insertMovies(it) }
+                        getPeople()
+                        getPlanets()
                         result = RequestResult.Success(ApiResponseType.GetMovies(it))
                     } ?: run {
                         result = RequestResult.ServerError(
@@ -58,6 +62,7 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
         }
         return result
     }
+
 
 
     override suspend fun getPerson(index: Int): RequestResult {
@@ -105,7 +110,6 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
         return result
     }
 
-    /*todo тут должно быть что-то на rxJava, но не умею*/
     override suspend fun getPlanet(index: Int): RequestResult {
         var result: RequestResult =
             RequestResult.EnqueueError("StarWarsRepositoryImpl getMovies not working")
@@ -153,12 +157,10 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
 
     /*todo тут должно быть что-то на rxJava, но не умею*/
     override suspend fun getPlanets() {
-        val planetList = mutableListOf<Planet>()
         var pageCounter = 0
         var gotMorePages = true
-
-        while (gotMorePages) {
-            try {
+        try {
+            while (gotMorePages) {
                 val call = getPlanetByPage(if (pageCounter == 0) null else pageCounter)
                 when {
                     call.isSuccessful -> {
@@ -167,65 +169,59 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
                             pageCounter++
 
                             call.body()?.results?.let {
-                                planetList.addAll(it)
-                                it.forEach { planet->
+                                it.forEach { planet ->
                                     localDbRepository.insertPlanet(planet)
                                 }
 
                             }
-                            Log.e("bd_download", "planet list size: ${planetList.size}")
 
                         } ?: run {
                             gotMorePages = false
                             pageCounter = 0
-                            Log.e("bd_download", "planet don't have more pages")
                             call.body()?.results?.let {
-                                planetList.addAll(it)
+                                it.forEach { planet ->
+                                    localDbRepository.insertPlanet(planet)
+                                }
                             }
-                            Log.e("bd_download", "planet list size: ${planetList.size}")
                         }
                     }
-
                     else -> {
                         gotMorePages = true
                     }
                 }
-            } catch (e: Exception) {
-                gotMorePages = true
             }
+        } catch (e: Exception) {
+            gotMorePages = true
         }
     }
 
+    /*todo тут должно быть что-то на rxJava, но не умею*/
     override suspend fun getPeople() {
-        val personList = mutableListOf<Person>()
         var pageCounter = 0
         var gotMorePages = true
 
-        while (gotMorePages) {
-            try {
+
+        try {
+            while (gotMorePages) {
                 val call = getPeopleByPage(if (pageCounter == 0) null else pageCounter)
                 when {
                     call.isSuccessful -> {
                         call.body()?.next?.let {
                             gotMorePages = true
                             pageCounter++
-
                             call.body()?.results?.let {
-                                personList.addAll(it)
-                                it.forEach { person->
+                                it.forEach { person ->
                                     localDbRepository.insertPerson(person)
                                 }
                             }
-                            Log.e("bd_download", "personList size: ${personList.size}")
-
                         } ?: run {
                             gotMorePages = false
                             pageCounter = 0
                             call.body()?.results?.let {
-                                personList.addAll(it)
+                                it.forEach { person ->
+                                    localDbRepository.insertPerson(person)
+                                }
                             }
-                            Log.e("bd_download", "personList size: ${personList.size}")
-                            Log.e("bd_download", "people don't have more pages")
                         }
                     }
 
@@ -233,9 +229,9 @@ class NetworkRepositoryImpl @Inject constructor(private val starWarsApi: StarWar
                         gotMorePages = true
                     }
                 }
-            } catch (e: Exception) {
-                gotMorePages = true
             }
+        } catch (e: Exception) {
+            gotMorePages = true
         }
     }
 
