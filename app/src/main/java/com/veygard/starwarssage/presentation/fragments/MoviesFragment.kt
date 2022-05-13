@@ -30,13 +30,10 @@ class MoviesFragment : Fragment() {
         viewModel.viewModelState.addObserver { result ->
             when(result){
                 is SwViewModelState.GotMovies -> {
-                    binding.textView.text = "movies server count: ${result.getMovies.getMoviesResponse.results?.size.toString()}"
                 }
                 is SwViewModelState.GotPerson -> {
-                    binding.textView.text = "person ${result.person.name}"
                 }
                 is SwViewModelState.GotPlanet -> {
-                    binding.textView.text = "planet ${result.planet.name}"
                 }
             }
         }
@@ -44,7 +41,6 @@ class MoviesFragment : Fragment() {
         viewModel.localState.addObserver { result ->
             when(result){
                 is SwViewModelState.GotMoviesLocal -> {
-                    binding.textView.text = "movies count Local: ${result.list.size}"
                 }
             }
 
@@ -62,21 +58,6 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonMovies.setOnClickListener {
-            viewModel.getMoviesFromServer()
-        }
-        binding.buttonPerson.setOnClickListener {
-            viewModel.getPeople()
-            Log.e("button_click", "person button was clicked")
-        }
-        binding.buttonPlanet.setOnClickListener {
-            viewModel.getPlanets()
-            Log.e("button_click", "planet button was clicked")
-        }
-
-        binding.buttonLocal.setOnClickListener {
-            Log.e("button_click", "local button was clicked")
-        }
     }
 
     override fun onDestroy() {
