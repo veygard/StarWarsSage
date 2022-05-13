@@ -1,10 +1,10 @@
-package com.veygard.starwarssage.domain.use_case
+package com.veygard.starwarssage.domain.use_case.network
 
-data class StarWarsUseCases(
+
+data class NetworkUseCases(
     val getMoviesUseCase: GetMoviesUseCase,
     val getPersonUseCase: GetPersonUseCase,
     val getPlanetUseCase: GetPlanetUseCase,
     val getPlanetsUseCase: GetPlanetsUseCase,
     val getPeopleUseCase: GetPeopleUseCase,
-    val getLocalMoviesUseCase: GetLocalMoviesUseCase
 )

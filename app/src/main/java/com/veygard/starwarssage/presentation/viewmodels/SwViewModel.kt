@@ -4,7 +4,8 @@ import android.util.Log
 import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
-import com.veygard.starwarssage.domain.use_case.StarWarsUseCases
+import com.veygard.starwarssage.domain.use_case.local.LocalUseCases
+import com.veygard.starwarssage.domain.use_case.network.NetworkUseCases
 import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SwViewModel @Inject constructor(
-    private val starWarsUseCases: StarWarsUseCases
+    private val networkUseCases: NetworkUseCases,
+    private val localUseCases: LocalUseCases,
 ) : ViewModel() {
 
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
@@ -43,13 +45,13 @@ class SwViewModel @Inject constructor(
         }
     }
     suspend fun getLocalMovies(): List<Movie> {
-        return starWarsUseCases.getLocalMoviesUseCase.start()
+        return localUseCases.getLocalMoviesUseCase.start()
     }
 
     fun getMoviesFromServer() {
         viewModelScope.launch {
             _loadingState.value = true
-            when (val result = starWarsUseCases.getMoviesUseCase.start()) {
+            when (val result = networkUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
                     _viewModelState.value = SwViewModelState.GotMovies(result.response as ApiResponseType.GetMovies)
@@ -72,7 +74,7 @@ class SwViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingState.value = true
             Log.e("button_click", "person VM started")
-            val result = starWarsUseCases.getPersonUseCase.start(index)
+            val result = networkUseCases.getPersonUseCase.start(index)
 
             when (result) {
                 is RequestResult.Success -> {
@@ -97,7 +99,7 @@ class SwViewModel @Inject constructor(
     fun getPlanet(index: Int) {
         viewModelScope.launch {
             _loadingState.value = true
-            when (val result = starWarsUseCases.getPlanetUseCase.start(index)) {
+            when (val result = networkUseCases.getPlanetUseCase.start(index)) {
                 is RequestResult.Success -> {
                     _loadingState.value = false
                     val getPlanet = result.response as ApiResponseType.GetPlanet
@@ -120,14 +122,14 @@ class SwViewModel @Inject constructor(
     fun getPlanets() {
         viewModelScope.launch {
             Log.e("bd_download", "get planets VM start")
-            starWarsUseCases.getPlanetsUseCase.start()
+            networkUseCases.getPlanetsUseCase.start()
         }
     }
 
     fun getPeople() {
         viewModelScope.launch {
             Log.e("bd_download", "get people VM start")
-            starWarsUseCases.getPeopleUseCase.start()
+            networkUseCases.getPeopleUseCase.start()
         }
     }
 
