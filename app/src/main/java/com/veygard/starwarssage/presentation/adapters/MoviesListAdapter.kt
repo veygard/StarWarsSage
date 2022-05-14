@@ -11,7 +11,7 @@ import com.veygard.starwarssage.databinding.MovieItemBinding
 import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.util.getPoster
 
-class MoviesListAdapter(private val moviesList: List<Movie>, private val movieClick: MovieClickInterface?, private val context: Context) :
+class MoviesListAdapter(private var moviesList: List<Movie>, private val movieClick: MovieClickInterface?, private val context: Context) :
     RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>() {
 
 
@@ -23,6 +23,11 @@ class MoviesListAdapter(private val moviesList: List<Movie>, private val movieCl
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun setFilter(newList: List<Movie>?) {
+        moviesList = newList ?: emptyList()
+        notifyDataSetChanged()
     }
 
     private fun getItem(position: Int): Movie = moviesList[position]

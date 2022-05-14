@@ -13,5 +13,7 @@
     <color name="background_night">#3C3838</color>
     <color name="shimmer_placeholder">#dddddd</color>
     <color name="transparent">#00000000 </color>
+    <color name="grey">#007C7979</color>
     <color name="error">#F44336</color>(
+
 </resources>

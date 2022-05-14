@@ -76,5 +76,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingBottom="140dp"
             android:layout_marginTop="8dp" />
+    <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@null"
+            android:src="@drawable/ic_search"
+            tools:ignore="HardcodedText,TouchTargetSizeCheck"
+            app:layout_constraintBottom_toBottomOf="@+id/search_bar"
+            app:layout_constraintTop_toTopOf="@+id/search_bar"
+            app:layout_constraintStart_toStartOf="@+id/search_bar"
+            android:layout_marginStart="14dp"
+            android:contentDescription="search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
