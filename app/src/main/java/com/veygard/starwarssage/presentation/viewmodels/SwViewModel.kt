@@ -24,6 +24,9 @@ class SwViewModel @Inject constructor(
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
     val viewModelState: LiveData<SwViewModelState?> = _viewModelState
 
+    private val _originalMovieList: MutableLiveData<List<Movie>?> = MutableLiveData(null)
+    val originalMovieList: LiveData<List<Movie>?> = _originalMovieList
+
 
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
@@ -37,7 +40,8 @@ class SwViewModel @Inject constructor(
             when {
                 result.isEmpty() -> getMoviesFromServer()
                 result.isNotEmpty() -> {
-                    _viewModelState.value = SwViewModelState.GotMoviesLocal(result)
+                    _originalMovieList.value= result
+                    _viewModelState.value = SwViewModelState.GotMoviesLocal
                 }
             }
         }
@@ -54,7 +58,8 @@ class SwViewModel @Inject constructor(
                 is RequestResult.Success -> {
                     _loadingState.value = false
                     (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
-                        _viewModelState.value = SwViewModelState.GotMovies(it)
+                        _viewModelState.value = SwViewModelState.GotMovies
+                        _originalMovieList.value = it
                         Log.e("get_movies", "state got list ")
                     } ?: run {
                         Log.e("get_movies", "state got error")

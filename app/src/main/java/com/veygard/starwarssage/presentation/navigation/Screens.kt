@@ -1,26 +1,26 @@
 package com.veygard.starwarssage.presentation.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import com.veygard.starwarssage.presentation.fragments.ErrorFragment
-import com.veygard.starwarssage.presentation.fragments.MoviesFragment
-import com.veygard.starwarssage.presentation.fragments.PersonFragment
-import com.veygard.starwarssage.presentation.fragments.PlanetFragment
+import com.veygard.starwarssage.presentation.screens.ErrorScreenFragment
+import com.veygard.starwarssage.presentation.screens.MoviesScreenFragment
+import com.veygard.starwarssage.presentation.screens.PeopleScreenFragment
+import com.veygard.starwarssage.presentation.screens.PlanetScreenFragment
 
 object Screens {
 
     fun moviesFragment() = FragmentScreen {
-        MoviesFragment()
+        MoviesScreenFragment()
     }
 
     fun errorScreen() = FragmentScreen {
-        ErrorFragment()
+        ErrorScreenFragment()
     }
 
     fun personScreen() = FragmentScreen {
-        PersonFragment()
+        PeopleScreenFragment()
     }
 
     fun planetScreen() = FragmentScreen{
-        PlanetFragment()
+        PlanetScreenFragment()
     }
 }
