@@ -27,11 +27,6 @@ class MoviesListAdapter(private var moviesList: List<Movie>, private val movieCl
         holder.bind(getItem(position))
     }
 
-    fun setFilter(newList: List<Movie>?) {
-        moviesList = newList ?: emptyList()
-        notifyDataSetChanged()
-    }
-
     private fun getItem(position: Int): Movie = moviesList[position]
 
     override fun getItemCount(): Int = moviesList.size
@@ -42,10 +37,13 @@ class MoviesListAdapter(private var moviesList: List<Movie>, private val movieCl
         private val context: Context,
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-
+        private var movie:Movie? = null
 
         @SuppressLint("SetTextI18n")
         fun bind(movie: Movie) {
+
+            this.movie= movie
+
             binding.apply {
 
                 root.setOnClickListener(this@MovieViewHolder)
@@ -76,7 +74,7 @@ class MoviesListAdapter(private var moviesList: List<Movie>, private val movieCl
 
 
         override fun onClick(p0: View?) {
-            movieClick?.onMovieClick()
+            movie?.url?.let { movieClick?.onMovieClick(it) }
         }
     }
 }

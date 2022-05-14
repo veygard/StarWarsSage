@@ -17,8 +17,8 @@ object Screens {
         ErrorScreenFragment()
     }
 
-    fun personScreen() = FragmentScreen {
-        PeopleScreenFragment()
+    fun peopleScreen(movieUrl: String) = FragmentScreen {
+        PeopleScreenFragment.newInstance(movieUrl)
     }
 
     fun planetScreen() = FragmentScreen{

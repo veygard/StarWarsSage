@@ -14,7 +14,7 @@ import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.adapters.MoviesListAdapter
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 
-class MovieListFragment: Fragment(R.layout.fragment_movie_list), MovieClickInterface {
+class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
@@ -36,7 +36,7 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list), MovieClickInter
 
 
         binding.recyclerMovieList.also {
-            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(), this, requireContext())
+            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(), viewModel.movieScreenClickInterfaceHolder.value, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
@@ -47,9 +47,6 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list), MovieClickInter
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onMovieClick() {
     }
 
 }

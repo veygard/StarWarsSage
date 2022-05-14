@@ -6,6 +6,7 @@ import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.local.LocalUseCases
 import com.veygard.starwarssage.domain.use_case.network.NetworkUseCases
+import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -37,6 +38,13 @@ class SwViewModel @Inject constructor(
     private val _showToast: MutableLiveData<ToastTypes?> = MutableLiveData(null)
     val showToast: LiveData<ToastTypes?> = _showToast
 
+    private val _movieScreenClickInterfaceHolder: androidx.lifecycle.MutableLiveData<MovieClickInterface?> =
+        androidx.lifecycle.MutableLiveData(null)
+    val movieScreenClickInterfaceHolder: androidx.lifecycle.LiveData<MovieClickInterface?> = _movieScreenClickInterfaceHolder
+
+    fun setClickInterface(clickInterface: MovieClickInterface){
+        _movieScreenClickInterfaceHolder.value= clickInterface
+    }
     var filterValue = ""
 
     fun getMovies() {
