@@ -10,6 +10,8 @@ import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.MovieItemBinding
 import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.util.getPoster
+import com.veygard.starwarssage.util.toFullString
+import com.veygard.starwarssage.util.toLocalDate
 
 class MoviesListAdapter(private var moviesList: List<Movie>, private val movieClick: MovieClickInterface?, private val context: Context) :
     RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>() {
@@ -51,7 +53,7 @@ class MoviesListAdapter(private var moviesList: List<Movie>, private val movieCl
                 movieItemDirector.text = context.getString(R.string.movie_item_director,movie.director)
                 movieItemEpisode.text = context.getString(R.string.movie_item_episode, movie.episode_id)
                 movieItemProducer.text = context.getString(R.string.movie_item_producer, movie.producer)
-                movieItemRelease.text = context.getString(R.string.movie_item_release, movie.release_date)
+                movieItemRelease.text = context.getString(R.string.movie_item_release, movie.release_date?.toLocalDate()?.toFullString())
                 movieItemText.text = movie.opening_crawl?.replace("\n", "")?.replace("\r", " ")
 
                 getPoster(movie.episode_id)?.let {
