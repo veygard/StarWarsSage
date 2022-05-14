@@ -36,7 +36,7 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list), MovieClickInter
 
 
         binding.recyclerMovieList.also {
-            adapter = MoviesListAdapter(moviesList = viewModel.originalMovieList.value ?: emptyList(), this, requireContext())
+            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(), this, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)

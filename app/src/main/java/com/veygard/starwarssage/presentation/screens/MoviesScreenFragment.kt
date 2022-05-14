@@ -55,19 +55,16 @@ class MoviesScreenFragment : Fragment(), MovieClickInterface {
         binding.searchBar.setOnQueryTextListener(object :
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(text: String): Boolean {
-                when {
-                    text.isNotEmpty() -> {
-                    }
-                    else -> {
-                    }
-                }
+                viewModel.filterMoviesBySearch(text)
                 toggleVisibility( text.isEmpty(), binding.cancelButton)
                 toggleSearchViewIconColor(text.isNotEmpty())
                 return false
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-
+                viewModel.filterMoviesBySearch(query ?: "")
+                toggleVisibility( query?.isEmpty() ?:true, binding.cancelButton)
+                toggleSearchViewIconColor(query?.isNotEmpty() ?: false)
                 return false
             }
         })
