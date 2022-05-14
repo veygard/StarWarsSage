@@ -5,10 +5,11 @@ import com.veygard.starwarssage.presentation.screens.ErrorScreenFragment
 import com.veygard.starwarssage.presentation.screens.MoviesScreenFragment
 import com.veygard.starwarssage.presentation.screens.PeopleScreenFragment
 import com.veygard.starwarssage.presentation.screens.PlanetScreenFragment
+import javax.inject.Inject
 
 object Screens {
 
-    fun moviesFragment() = FragmentScreen {
+    fun moviesScreen() = FragmentScreen {
         MoviesScreenFragment()
     }
 

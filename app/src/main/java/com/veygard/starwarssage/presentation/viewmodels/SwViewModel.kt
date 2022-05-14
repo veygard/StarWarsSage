@@ -38,7 +38,6 @@ class SwViewModel @Inject constructor(
 
     var filterValue = ""
 
-
     fun getMovies() {
         viewModelScope.launch {
             val result = getLocalMovies()
@@ -51,6 +50,10 @@ class SwViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setStateNull(){
+        _viewModelState.value = null
     }
 
     fun filterMoviesBySearch(value: String) {
@@ -72,10 +75,8 @@ class SwViewModel @Inject constructor(
                             _moviesListToShow.value = newList
                         }
                     }
-
                 }
             }
-
         }
     }
 
@@ -85,10 +86,10 @@ class SwViewModel @Inject constructor(
 
     private fun getMoviesFromServer() {
         viewModelScope.launch {
-            _loadingState.value = true
+            _viewModelState.value = SwViewModelState.Loading
+
             when (val result = networkUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
-                    _loadingState.value = false
                     (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
                         _viewModelState.value = SwViewModelState.GotMovies
                         originalMovieList = it.sortedBy { it.episode_id }
@@ -98,23 +99,22 @@ class SwViewModel @Inject constructor(
                     } ?: run {
                         Log.e("get_movies", "state got error")
                         _viewModelState.value =
-                            SwViewModelState.Error(RequestResult.NoMoviesError("don't have movies"))
+                            SwViewModelState.ServerError(RequestResult.NoMoviesError("don't have movies"))
                     }
 
                     Log.e("get_movies", "state ended ")
-
                     networkUseCases.getPlanetsUseCase.start()
                     networkUseCases.getPeopleUseCase.start()
                 }
 
                 is RequestResult.ConnectionError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ConnectionError
+                    _viewModelState.value = SwViewModelState.ServerError(result)
                 }
 
                 is RequestResult.ServerError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ServerError
+                    _viewModelState.value = SwViewModelState.ServerError(result)
                 }
             }
         }
@@ -122,24 +122,20 @@ class SwViewModel @Inject constructor(
 
     fun getPerson(index: Int) {
         viewModelScope.launch {
-            _loadingState.value = true
             Log.e("button_click", "person VM started")
             val result = networkUseCases.getPersonUseCase.start(index)
 
             when (result) {
                 is RequestResult.Success -> {
-                    _loadingState.value = false
                     val getPerson = result.response as ApiResponseType.GetPerson
                     _viewModelState.value = SwViewModelState.GotPerson(getPerson.person)
                 }
 
                 is RequestResult.ConnectionError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ConnectionError
                 }
 
                 is RequestResult.ServerError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ServerError
                 }
             }
@@ -148,21 +144,17 @@ class SwViewModel @Inject constructor(
 
     fun getPlanet(index: Int) {
         viewModelScope.launch {
-            _loadingState.value = true
             when (val result = networkUseCases.getPlanetUseCase.start(index)) {
                 is RequestResult.Success -> {
-                    _loadingState.value = false
                     val getPlanet = result.response as ApiResponseType.GetPlanet
                     _viewModelState.value = SwViewModelState.GotPlanet(getPlanet.planet)
                 }
 
                 is RequestResult.ConnectionError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ConnectionError
                 }
 
                 is RequestResult.ServerError -> {
-                    _loadingState.value = false
                     _showToast.value = ToastTypes.ServerError
                 }
             }

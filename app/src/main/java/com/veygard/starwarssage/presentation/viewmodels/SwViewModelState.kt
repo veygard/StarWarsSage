@@ -10,7 +10,8 @@ sealed class SwViewModelState {
     object GotMovies: SwViewModelState()
     object GotMoviesLocal: SwViewModelState()
     object NotFound: SwViewModelState()
+    object Loading: SwViewModelState()
     data class GotPerson(val person: Person): SwViewModelState()
     data class GotPlanet(val planet: Planet): SwViewModelState()
-    data class Error(val result: RequestResult): SwViewModelState()
+    data class ServerError(val result: RequestResult): SwViewModelState()
 }

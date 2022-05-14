@@ -10,4 +10,9 @@
     <string name="movie_item_episode">Эпизод: %1$d</string>
     <string name="nothing_found_title">Ничего не нашлось</string>
     <string name="nothing_found_text">Попробуй скорректировать запрос</string>
+
+    <string name="critical_error_screen_title">Что-то пошло не так</string>
+    <string name="critical_error_screen_text">Проверьте подключение к интернет</string>
+    <string name="critical_error_screen_again">Попробовать снова</string>
+
 </resources>

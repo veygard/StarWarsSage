@@ -1,6 +1,7 @@
 package com.veygard.starwarssage.presentation.screens
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,25 +10,35 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenMoviesBinding
 import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
+import com.veygard.starwarssage.presentation.navigation.Screens
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.MovieListFragment
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.util.toggleVisibility
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MoviesScreenFragment : Fragment(), MovieClickInterface {
+
+@AndroidEntryPoint
+class MoviesScreenFragment: Fragment(), MovieClickInterface {
 
     private var _binding: FragmentScreenMoviesBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SwViewModel by activityViewModels()
 
+    @Inject
+    lateinit var router:Router
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setStateNull()
         viewModel.getMovies()
     }
 
@@ -46,10 +57,11 @@ class MoviesScreenFragment : Fragment(), MovieClickInterface {
         cancelButtonListener()
     }
 
+
     private fun setListFragment() {
         val nestedFragment: Fragment = MovieListFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.list_container, nestedFragment).commit()
+        transaction.replace(R.id.list_container, nestedFragment).commitAllowingStateLoss()
     }
 
     private fun searchViewListener() {
@@ -89,7 +101,9 @@ class MoviesScreenFragment : Fragment(), MovieClickInterface {
                     Log.e("get_movies", "observer local got movies")
                     setListFragment()
                 }
-                is SwViewModelState.Error -> {}
+                is SwViewModelState.ServerError -> {
+                    router.navigateTo(Screens.errorScreen())
+                }
                 is SwViewModelState.GotPerson -> {}
                 is SwViewModelState.GotPlanet -> {}
                 SwViewModelState.NotFound -> setNothingFoundFragment()
