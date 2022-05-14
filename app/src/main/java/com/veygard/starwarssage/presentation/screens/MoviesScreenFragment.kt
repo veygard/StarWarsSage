@@ -19,6 +19,7 @@ import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.MovieListFragment
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
+import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
 import com.veygard.starwarssage.util.toggleVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -107,6 +108,7 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
                 is SwViewModelState.GotPerson -> {}
                 is SwViewModelState.GotPlanet -> {}
                 SwViewModelState.NotFound -> setNothingFoundFragment()
+                SwViewModelState.Loading -> setShimmerFragment()
             }
         }
     }
@@ -117,6 +119,11 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
         Toast.makeText(requireContext(), "movie click", Toast.LENGTH_SHORT).show()
     }
 
+    private fun setShimmerFragment() {
+        val nestedFragment: Fragment = ShimmerFragment()
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.list_container, nestedFragment).commit()
+    }
 
     private fun setNothingFoundFragment() {
         val nestedFragment: Fragment = NothingFoundFragment()

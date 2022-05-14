@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,6 +41,7 @@ class SwViewModel @Inject constructor(
 
     fun getMovies() {
         viewModelScope.launch {
+            _viewModelState.value = SwViewModelState.Loading
             val result = getLocalMovies()
             when {
                 result.isEmpty() -> getMoviesFromServer()
@@ -86,8 +88,7 @@ class SwViewModel @Inject constructor(
 
     private fun getMoviesFromServer() {
         viewModelScope.launch {
-            _viewModelState.value = SwViewModelState.Loading
-
+            delay(2000)
             when (val result = networkUseCases.getMoviesUseCase.start()) {
                 is RequestResult.Success -> {
                     (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {

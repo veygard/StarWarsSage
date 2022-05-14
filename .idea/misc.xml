@@ -6,6 +6,7 @@
         <entry key="..\:/Users/Vorga/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/auto_complete_list.xml" value="0.15780141843971632" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable-night/bg_rounded.xml" value="0.1095" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable-v24/ic_movie_error.xml" value="0.1095" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/bg_grey_rounded.xml" value="0.1875" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/bg_rounded.xml" value="0.1095" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/none.xml" value="0.1095" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -17,6 +18,7 @@
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_planet.xml" value="0.18704710144927536" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_screen_error.xml" value="0.21073961499493415" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/movie_item.xml" value="0.33" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/shimmer_placeholder_item.xml" value="0.25" />
       </map>
     </option>
   </component>
