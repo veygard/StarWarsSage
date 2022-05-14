@@ -45,8 +45,8 @@ class SwViewModel @Inject constructor(
             when {
                 result.isEmpty() -> getMoviesFromServer()
                 result.isNotEmpty() -> {
-                    originalMovieList = result
-                    _moviesListToShow.value =result
+                    originalMovieList = result.sortedBy { it.episode_id }
+                    _moviesListToShow.value =originalMovieList
                     _viewModelState.value = SwViewModelState.GotMoviesLocal
                 }
             }
@@ -83,8 +83,8 @@ class SwViewModel @Inject constructor(
                     _loadingState.value = false
                     (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
                         _viewModelState.value = SwViewModelState.GotMovies
-                        originalMovieList = it
-                        _moviesListToShow.value = it
+                        originalMovieList = it.sortedBy { it.episode_id }
+                        _moviesListToShow.value = originalMovieList
 
                         Log.e("get_movies", "state got list ")
                     } ?: run {

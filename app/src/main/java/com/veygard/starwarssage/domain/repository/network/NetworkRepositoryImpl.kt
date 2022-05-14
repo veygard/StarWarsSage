@@ -16,6 +16,7 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun getMovies(): RequestResult {
         var result: RequestResult =
             RequestResult.EnqueueError("StarWarsRepositoryImpl getMovies not working")
+
         try {
             val call = starWarsApi.getAllFilmsApi()
             when {
