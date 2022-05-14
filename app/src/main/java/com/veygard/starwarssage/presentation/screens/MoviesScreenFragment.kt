@@ -15,6 +15,7 @@ import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.MovieListFragment
+import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.util.toggleVisibility
 
 class MoviesScreenFragment : Fragment(), MovieClickInterface {
@@ -89,6 +90,9 @@ class MoviesScreenFragment : Fragment(), MovieClickInterface {
                     setListFragment()
                 }
                 is SwViewModelState.Error -> {}
+                is SwViewModelState.GotPerson -> {}
+                is SwViewModelState.GotPlanet -> {}
+                SwViewModelState.NotFound -> setNothingFoundFragment()
             }
         }
     }
@@ -100,6 +104,11 @@ class MoviesScreenFragment : Fragment(), MovieClickInterface {
     }
 
 
+    private fun setNothingFoundFragment() {
+        val nestedFragment: Fragment = NothingFoundFragment()
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.list_container, nestedFragment).commit()
+    }
     private fun toggleSearchViewIconColor(isNotEmpty: Boolean) {
         val icon = binding.searchIcon
 

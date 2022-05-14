@@ -63,8 +63,16 @@ class SwViewModel @Inject constructor(
                     _moviesListToShow.value = originalMovieList
                 }
                 else -> {
-                    _viewModelState.value = SwViewModelState.GotMoviesLocal
-                    _moviesListToShow.value = originalMovieList?.filter { it.title?.contains(value,ignoreCase = true) == true } ?: emptyList()
+                    val newList = originalMovieList?.filter { it.title?.contains(value,ignoreCase = true) == true }
+                        ?: emptyList()
+                    when{
+                        newList.isEmpty() -> _viewModelState.value = SwViewModelState.NotFound
+                        newList.isNotEmpty() -> {
+                            _viewModelState.value = SwViewModelState.GotMoviesLocal
+                            _moviesListToShow.value = newList
+                        }
+                    }
+
                 }
             }
 
