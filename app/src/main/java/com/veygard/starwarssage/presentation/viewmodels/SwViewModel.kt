@@ -31,7 +31,6 @@ class SwViewModel @Inject constructor(
     private val _moviesListToShow: MutableLiveData<List<Movie>?> = MutableLiveData(null)
     val moviesListToShow: LiveData<List<Movie>?> = _moviesListToShow
 
-
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
 
@@ -40,11 +39,13 @@ class SwViewModel @Inject constructor(
 
     private val _movieScreenClickInterfaceHolder: androidx.lifecycle.MutableLiveData<MovieClickInterface?> =
         androidx.lifecycle.MutableLiveData(null)
-    val movieScreenClickInterfaceHolder: androidx.lifecycle.LiveData<MovieClickInterface?> = _movieScreenClickInterfaceHolder
+    val movieScreenClickInterfaceHolder: androidx.lifecycle.LiveData<MovieClickInterface?> =
+        _movieScreenClickInterfaceHolder
 
-    fun setClickInterface(clickInterface: MovieClickInterface){
-        _movieScreenClickInterfaceHolder.value= clickInterface
+    fun setClickInterface(clickInterface: MovieClickInterface) {
+        _movieScreenClickInterfaceHolder.value = clickInterface
     }
+
     var filterValue = ""
 
     fun getMovies() {
@@ -55,14 +56,55 @@ class SwViewModel @Inject constructor(
                 result.isEmpty() -> getMoviesFromServer()
                 result.isNotEmpty() -> {
                     originalMovieList = result.sortedBy { it.episode_id }
-                    _moviesListToShow.value =originalMovieList
+                    _moviesListToShow.value = originalMovieList
                     _viewModelState.value = SwViewModelState.GotMoviesLocal
                 }
             }
         }
     }
 
-    fun setStateNull(){
+    fun getMovie(url: String) {
+        viewModelScope.launch {
+            _viewModelState.value = SwViewModelState.Loading
+            val result = localUseCases.getLocalMovieUseCase.start(url)
+            result?.let {
+                _viewModelState.value = SwViewModelState.GotMovie(it)
+            } ?: kotlin.run {
+                getMovieFromServer(url)
+            }
+        }
+    }
+
+    private fun getMovieFromServer(url: String) {
+        viewModelScope.launch {
+            try {
+                val indexStr = url.substringAfter("films/").replace("/", "")
+                val index = indexStr.toInt()
+
+                when (val result = networkUseCases.getMovieUseCase.start(index)) {
+                    is RequestResult.Success -> {
+                        (result.response as ApiResponseType.GetMovie).movie.let {
+                            _viewModelState.value = SwViewModelState.GotMovie(it)
+                        }
+                    }
+
+                    is RequestResult.ConnectionError -> {
+                        _showToast.value = ToastTypes.ConnectionError
+                        _viewModelState.value = SwViewModelState.ServerError(result)
+                    }
+
+                    is RequestResult.ServerError -> {
+                        _showToast.value = ToastTypes.ServerError
+                        _viewModelState.value = SwViewModelState.ServerError(result)
+                    }
+                }
+            } catch (e: Exception) {
+                _showToast.value = ToastTypes.AppError
+            }
+        }
+    }
+
+    fun setStateNull() {
         _viewModelState.value = null
     }
 
@@ -76,9 +118,14 @@ class SwViewModel @Inject constructor(
                     _moviesListToShow.value = originalMovieList
                 }
                 else -> {
-                    val newList = originalMovieList?.filter { it.title?.contains(value,ignoreCase = true) == true }
+                    val newList = originalMovieList?.filter {
+                        it.title?.contains(
+                            value,
+                            ignoreCase = true
+                        ) == true
+                    }
                         ?: emptyList()
-                    when{
+                    when {
                         newList.isEmpty() -> _viewModelState.value = SwViewModelState.NotFound
                         newList.isNotEmpty() -> {
                             _viewModelState.value = SwViewModelState.GotMoviesLocal
@@ -91,15 +138,15 @@ class SwViewModel @Inject constructor(
     }
 
     private suspend fun getLocalMovies(): List<Movie> {
-        return localUseCases.getLocalMoviesUseCase.start()
+        return localUseCases.getLocalMoviesListUseCase.start()
     }
 
     private fun getMoviesFromServer() {
         viewModelScope.launch {
-            delay(2000)
-            when (val result = networkUseCases.getMoviesUseCase.start()) {
+            delay(2000) //показ шиммера
+            when (val result = networkUseCases.getAllMoviesUseCase.start()) {
                 is RequestResult.Success -> {
-                    (result.response as ApiResponseType.GetMovies).getMoviesResponse.results?.let {
+                    (result.response as ApiResponseType.GetAllMovies).getMoviesResponse.results?.let {
                         _viewModelState.value = SwViewModelState.GotMovies
                         originalMovieList = it.sortedBy { it.episode_id }
                         _moviesListToShow.value = originalMovieList

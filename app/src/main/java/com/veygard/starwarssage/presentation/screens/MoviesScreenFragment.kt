@@ -127,13 +127,13 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
     private fun setShimmerFragment() {
         val nestedFragment: Fragment = ShimmerFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.movie_list_container, nestedFragment).commit()
+        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
     }
 
     private fun setNothingFoundFragment() {
         val nestedFragment: Fragment = NothingFoundFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.movie_list_container, nestedFragment).commit()
+        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
     }
     private fun toggleSearchViewIconColor(isNotEmpty: Boolean) {
         val icon = binding.searchIcon
