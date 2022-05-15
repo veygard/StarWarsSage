@@ -14,6 +14,8 @@ interface LocalDbRepository {
 
     suspend fun getAllMovies() : List<Movie>
 
+    suspend fun getMovie(url:String) : Movie?
+
     suspend fun getPerson(url:String)
 
     suspend fun getPlanet(url:String)

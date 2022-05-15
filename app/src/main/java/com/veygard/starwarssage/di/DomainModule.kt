@@ -6,10 +6,7 @@ import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepositoryImpl
 import com.veygard.starwarssage.domain.repository.network.NetworkRepository
 import com.veygard.starwarssage.domain.repository.network.NetworkRepositoryImpl
-import com.veygard.starwarssage.domain.use_case.local.GetLocalMoviesUseCase
-import com.veygard.starwarssage.domain.use_case.local.GetLocalPersonUseCase
-import com.veygard.starwarssage.domain.use_case.local.GetLocalPlanetUseCase
-import com.veygard.starwarssage.domain.use_case.local.LocalUseCases
+import com.veygard.starwarssage.domain.use_case.local.*
 import com.veygard.starwarssage.domain.use_case.network.*
 import dagger.Module
 import dagger.Provides
@@ -48,9 +45,10 @@ object DomainModule {
     fun provideLocalUseCases(
         localDbRepository: LocalDbRepository
     ): LocalUseCases = LocalUseCases(
-        getLocalMoviesUseCase = GetLocalMoviesUseCase(localDbRepository),
+        getLocalMoviesListUseCase = GetLocalMoviesListUseCase(localDbRepository),
         getLocalPersonUseCase = GetLocalPersonUseCase(localDbRepository),
-        getLocalPlanetUseCase = GetLocalPlanetUseCase(localDbRepository)
+        getLocalPlanetUseCase = GetLocalPlanetUseCase(localDbRepository),
+        getLocalMovieUseCase = GetLocalMovieUseCase(localDbRepository)
     )
 
     @Provides

@@ -1,5 +1,6 @@
 package com.veygard.starwarssage.domain.repository.local
 
+import com.veygard.starwarssage.data.entities.toDomain
 import com.veygard.starwarssage.data.entities.toDomainList
 import com.veygard.starwarssage.data.local.StarWarsDao
 import com.veygard.starwarssage.domain.model.*
@@ -23,6 +24,10 @@ class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: St
 
     override suspend fun getAllMovies(): List<Movie> {
         return starWarsDatabase.getAllMoviesDao().toDomainList()
+    }
+
+    override suspend fun getMovie(url: String): Movie? {
+       return starWarsDatabase.getMovieDao(url)?.toDomain()
     }
 
     override suspend fun getPerson(url:String) {
