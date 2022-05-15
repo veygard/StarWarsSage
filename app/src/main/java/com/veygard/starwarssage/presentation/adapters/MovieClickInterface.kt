@@ -1,7 +1,7 @@
 package com.veygard.starwarssage.presentation.adapters
 
 
-interface MovieClickInterface {
+interface MovieClickInterface: ClickInterface {
 
     fun onMovieClick(movieUrl: String)
 

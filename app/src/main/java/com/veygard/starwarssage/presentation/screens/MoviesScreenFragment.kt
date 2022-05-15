@@ -52,7 +52,6 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(viewModel.movieScreenClickInterfaceHolder.value == null) viewModel.setClickInterface(this)
         observeData()
         searchViewListener()
         cancelButtonListener()
@@ -60,9 +59,14 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
 
     override fun onResume() {
         super.onResume()
+        if(viewModel.clickInterfaceHolder.value == null) viewModel.setClickInterface(this)
         activity?.title = getString(R.string.movies_fragment_title)
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(viewModel.clickInterfaceHolder.value != null) viewModel.setClickInterface(null)
+    }
 
     private fun setListFragment() {
         val nestedFragment: Fragment = MovieListFragment()

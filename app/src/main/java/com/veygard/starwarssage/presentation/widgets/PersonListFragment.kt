@@ -10,24 +10,27 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentMovieListBinding
+import com.veygard.starwarssage.databinding.FragmentPeopleListBinding
 import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.adapters.MoviesListAdapter
+import com.veygard.starwarssage.presentation.adapters.PersonClickInterface
+import com.veygard.starwarssage.presentation.adapters.PersonListAdapter
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 
-class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
-    private var _binding: FragmentMovieListBinding? = null
+class PersonListFragment: Fragment(R.layout.fragment_movie_list) {
+    private var _binding: FragmentPeopleListBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SwViewModel by activityViewModels()
 
-    private var adapter: MoviesListAdapter? = null
+    private var adapter: PersonListAdapter? = null
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding= FragmentMovieListBinding.inflate(inflater, container, false)
+        _binding= FragmentPeopleListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -35,8 +38,8 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.recyclerMovieList.also {
-            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(), viewModel.clickInterfaceHolder.value as MovieClickInterface, requireContext())
+        binding.recyclerPeopleList.also {
+            adapter = PersonListAdapter(personList = viewModel.peopleToShow.value?.toList() ?: emptyList(), viewModel.clickInterfaceHolder.value as PersonClickInterface, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)

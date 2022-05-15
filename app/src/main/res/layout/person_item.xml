@@ -36,7 +36,7 @@
                 android:textSize="16sp"
                 android:textStyle="italic"
                 style="@style/Theme.StarWarsSage"
-                android:id="@+id/person_item_director"
+                android:id="@+id/person_item_sex"
                 android:layout_marginStart="8dp" />
 
         <TextView
@@ -46,7 +46,7 @@
                 android:textSize="16sp"
                 android:textStyle="italic"
                 style="@style/Theme.StarWarsSage"
-                android:id="@+id/person_item_producer"
+                android:id="@+id/person_item_born_date"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp" />
 
@@ -61,6 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
+                android:paddingBottom="24dp"
                 app:layout_constraintBottom_toBottomOf="parent" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -115,6 +115,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 call.isSuccessful -> {
                     call.body()?.let {
                         result = RequestResult.Success(ApiResponseType.GetPerson(it))
+                        localDbRepository.insertPerson(it)
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
@@ -159,6 +160,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 call.isSuccessful -> {
                     call.body()?.let {
                         result = RequestResult.Success(ApiResponseType.GetPlanet(it))
+                        localDbRepository.insertPlanet(it)
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()

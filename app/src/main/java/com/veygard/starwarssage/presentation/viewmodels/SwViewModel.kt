@@ -2,10 +2,12 @@ package com.veygard.starwarssage.presentation.viewmodels
 
 import android.util.Log
 import com.veygard.starwarssage.domain.model.Movie
+import com.veygard.starwarssage.domain.model.Person
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.local.LocalUseCases
 import com.veygard.starwarssage.domain.use_case.network.NetworkUseCases
+import com.veygard.starwarssage.presentation.adapters.ClickInterface
 import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,19 +33,22 @@ class SwViewModel @Inject constructor(
     private val _moviesListToShow: MutableLiveData<List<Movie>?> = MutableLiveData(null)
     val moviesListToShow: LiveData<List<Movie>?> = _moviesListToShow
 
+    private val _peopleToShow: MutableLiveData<MutableSet<Person>?> = MutableLiveData(mutableSetOf())
+    val peopleToShow: LiveData<MutableSet<Person>?> = _peopleToShow
+
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
 
     private val _showToast: MutableLiveData<ToastTypes?> = MutableLiveData(null)
     val showToast: LiveData<ToastTypes?> = _showToast
 
-    private val _movieScreenClickInterfaceHolder: androidx.lifecycle.MutableLiveData<MovieClickInterface?> =
+    private val _clickInterfaceHolder: androidx.lifecycle.MutableLiveData<ClickInterface?> =
         androidx.lifecycle.MutableLiveData(null)
-    val movieScreenClickInterfaceHolder: androidx.lifecycle.LiveData<MovieClickInterface?> =
-        _movieScreenClickInterfaceHolder
+    val clickInterfaceHolder: androidx.lifecycle.LiveData<ClickInterface?> =
+        _clickInterfaceHolder
 
-    fun setClickInterface(clickInterface: MovieClickInterface) {
-        _movieScreenClickInterfaceHolder.value = clickInterface
+    fun setClickInterface(clickInterface: ClickInterface?) {
+        _clickInterfaceHolder.value = clickInterface
     }
 
     var filterValue = ""
@@ -102,6 +107,42 @@ class SwViewModel @Inject constructor(
                 _showToast.value = ToastTypes.AppError
             }
         }
+    }
+
+    fun getPeopleByMovie(movie: Movie) {
+        viewModelScope.launch {
+            _peopleToShow.value?.clear()
+            _viewModelState.value = SwViewModelState.Loading
+
+            //получаем персонажей из бд или от сервера
+            movie.characters?.forEach { personUrl ->
+                val result = localUseCases.getLocalPersonUseCase.start(personUrl)
+                Log.e("get_ppl_result", "person: ${result?.name ?: "not found"}")
+                result?.let {
+                    _peopleToShow.value?.add(it)
+                    Log.e("get_ppl_result", "person local found: ${result.name}")
+                } ?: kotlin.run {
+                    try {
+                        val indexStr = personUrl.substringAfter("people/").replace("/", "")
+                        val index = indexStr.toInt()
+                        when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
+                            is RequestResult.Success -> {
+                                (serverResult.response as ApiResponseType.GetPerson).person.let {
+                                    _peopleToShow.value?.add(it)
+                                }
+                                Log.e("get_ppl_result", "person server download: ${result?.name}")
+                            }
+                            else -> {}
+                        }
+                    } catch (e: Exception) {
+                        _showToast.value = ToastTypes.AppError
+                    }
+                }
+            }
+            //показываем получившийся список
+            _viewModelState.value = SwViewModelState.GotPeopleByMovie
+        }
+
     }
 
     fun setStateNull() {
