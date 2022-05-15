@@ -18,6 +18,13 @@ class PeopleScreenFragment : Fragment() {
         arguments?.let {
             movieUrl = it.getString(MOVIE_URL)
         }
+
+        movieUrl?.let {
+            activity?.title = it
+        } ?: kotlin.run {
+            activity?.actionBar?.hide()
+        }
+
     }
 
     override fun onCreateView(

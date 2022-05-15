@@ -54,12 +54,15 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         if(viewModel.movieScreenClickInterfaceHolder.value == null) viewModel.setClickInterface(this)
-
         observeData()
         searchViewListener()
         cancelButtonListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.movies_fragment_title)
     }
 
 

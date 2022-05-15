@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        title = getString(R.string.movies_fragment_title)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
