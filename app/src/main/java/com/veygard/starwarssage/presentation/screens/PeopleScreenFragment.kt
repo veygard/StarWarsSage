@@ -11,13 +11,14 @@ import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenPeopleBinding
-import com.veygard.starwarssage.presentation.adapters.PersonClickInterface
 import com.veygard.starwarssage.presentation.navigation.Screens
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.presentation.widgets.PersonListFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
+import com.veygard.starwarssage.presentation.supports.toggleSearchViewIconColor
+import com.veygard.starwarssage.presentation.supports.toggleVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -64,6 +65,8 @@ class PeopleScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("PeopleScreenFragment", "movie url $movieUrl")
         observeData()
+        searchViewListener()
+        cancelButtonListener()
     }
 
 
@@ -82,7 +85,7 @@ class PeopleScreenFragment : Fragment() {
                 is SwViewModelState.GotPerson -> {}
                 is SwViewModelState.GotPlanet -> {}
                 SwViewModelState.Loading -> setShimmerFragment()
-                SwViewModelState.NotFound -> {}
+                SwViewModelState.NotFound -> setNothingFoundFragment()
                 is SwViewModelState.ServerError -> {}
                 SwViewModelState.GotPeopleByMovie -> {
                     setListFragment()
@@ -109,6 +112,33 @@ class PeopleScreenFragment : Fragment() {
         val transaction = childFrManager?.beginTransaction()
         transaction?.replace(R.id.people_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
+
+    private fun searchViewListener() {
+        binding.peopleSearchBar.setOnQueryTextListener(object :
+            android.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(text: String): Boolean {
+                viewModel.filterPeopleBySearch(text)
+                toggleVisibility( text.isEmpty(), binding.peopleCancelButton)
+                toggleSearchViewIconColor(text.isNotEmpty(), requireContext(), binding.peopleSearchIcon)
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.filterPeopleBySearch(query ?: "")
+                toggleVisibility( query?.isEmpty() ?:true, binding.peopleCancelButton)
+                toggleSearchViewIconColor(query?.isNotEmpty() ?: false, requireContext(), binding.peopleSearchIcon)
+                return false
+            }
+        })
+    }
+
+    private fun cancelButtonListener() {
+        binding.peopleCancelButton.setOnClickListener {
+            binding.peopleSearchBar.setQuery("", false)
+            binding.peopleSearchBar.clearFocus()
+        }
+    }
+
 
 
     override fun onDestroyView() {

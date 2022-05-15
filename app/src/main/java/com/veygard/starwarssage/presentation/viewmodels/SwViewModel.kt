@@ -28,15 +28,17 @@ class SwViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private var originalMovieList: List<Movie>? = null
 
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
     val viewModelState: LiveData<SwViewModelState?> = _viewModelState
 
+    private var originalMovieList: List<Movie>? = null
     private val _moviesListToShow: MutableLiveData<List<Movie>?> = MutableLiveData(null)
     val moviesListToShow: LiveData<List<Movie>?> = _moviesListToShow
 
-    private val _peopleToShow: MutableLiveData<MutableSet<Person>?> = MutableLiveData(mutableSetOf())
+    private var originalPersonList: List<Person>? = null
+    private val _peopleToShow: MutableLiveData<MutableSet<Person>?> =
+        MutableLiveData(mutableSetOf())
     val peopleToShow: LiveData<MutableSet<Person>?> = _peopleToShow
 
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -111,42 +113,43 @@ class SwViewModel @Inject constructor(
         }
 
     fun getPeopleByMovie(movie: Movie) {
-        viewModelScope.launch (getPeopleByMovieJob){
+        viewModelScope.launch(getPeopleByMovieJob) {
             _peopleToShow.value?.clear()
             _viewModelState.value = SwViewModelState.Loading
             Log.e("get_ppl_result", "movie url: ${movie.url}")
             //получаем персонажей из бд или от сервера
-                movie.characters?.forEach { personUrl ->
-                    val result = localUseCases.getLocalPersonUseCase.start(personUrl)
-                    Log.e("get_ppl_result", "person: ${result?.name ?: "not found"}")
-                    result?.let {
-                        _peopleToShow.value?.add(it)
-                        Log.e("get_ppl_result", "person local found: ${result.name}")
-                    } ?: kotlin.run {
-                        try {
-                            val indexStr = personUrl.substringAfter("people/").replace("/", "")
-                            val index = indexStr.toInt()
-                            when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
-                                is RequestResult.Success -> {
-                                    (serverResult.response as ApiResponseType.GetPerson).person.let {
-                                        _peopleToShow.value?.add(it)
-                                    }
-                                    Log.e("get_ppl_result", "person server download: ${result?.name}")
+            movie.characters?.forEach { personUrl ->
+                val result = localUseCases.getLocalPersonUseCase.start(personUrl)
+                Log.e("get_ppl_result", "person: ${result?.name ?: "not found"}")
+                result?.let {
+                    _peopleToShow.value?.add(it)
+                    Log.e("get_ppl_result", "person local found: ${result.name}")
+                } ?: kotlin.run {
+                    try {
+                        val indexStr = personUrl.substringAfter("people/").replace("/", "")
+                        val index = indexStr.toInt()
+                        when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
+                            is RequestResult.Success -> {
+                                (serverResult.response as ApiResponseType.GetPerson).person.let {
+                                    _peopleToShow.value?.add(it)
                                 }
-                                else -> {}
+                                Log.e("get_ppl_result", "person server download: ${result?.name}")
                             }
-                        } catch (e: Exception) {
-                            _showToast.value = ToastTypes.AppError
+                            else -> {}
                         }
+                    } catch (e: Exception) {
+                        _showToast.value = ToastTypes.AppError
                     }
+                }
             }
             //показываем получившийся список
+            originalPersonList= _peopleToShow.value?.toList()
             _viewModelState.value = SwViewModelState.GotPeopleByMovie
         }
     }
 
-    fun cancelGetPeopleByMovieJob(){
-        if(getPeopleByMovieJob.isActive) getPeopleByMovieJob.cancel()
+    fun cancelGetPeopleByMovieJob() {
+        if (getPeopleByMovieJob.isActive) getPeopleByMovieJob.cancel()
     }
 
     fun setStateNull() {
@@ -175,6 +178,35 @@ class SwViewModel @Inject constructor(
                         newList.isNotEmpty() -> {
                             _viewModelState.value = SwViewModelState.GotMoviesLocal
                             _moviesListToShow.value = newList
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun filterPeopleBySearch(value: String) {
+        viewModelScope.launch {
+            filterValue = value
+
+            when {
+                value.isEmpty() -> {
+                    _viewModelState.value = SwViewModelState.GotPeopleByMovie
+                    _peopleToShow.value = originalPersonList?.toMutableSet()
+                }
+                else -> {
+                    val newSet = originalPersonList?.filter {
+                        it.name?.contains(
+                            value,
+                            ignoreCase = true
+                        ) == true
+                    }
+                        ?: emptyList()
+                    when {
+                        newSet.isEmpty() -> _viewModelState.value = SwViewModelState.NotFound
+                        newSet.isNotEmpty() -> {
+                            _viewModelState.value = SwViewModelState.GotPeopleByMovie
+                            _peopleToShow.value = newSet.toMutableSet()
                         }
                     }
                 }

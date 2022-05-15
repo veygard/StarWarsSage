@@ -1,6 +1,5 @@
 package com.veygard.starwarssage.presentation.screens
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,14 +10,14 @@ import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenMoviesBinding
-import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.navigation.Screens
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.MovieListFragment
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
-import com.veygard.starwarssage.util.toggleVisibility
+import com.veygard.starwarssage.presentation.supports.toggleSearchViewIconColor
+import com.veygard.starwarssage.presentation.supports.toggleVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -70,14 +69,14 @@ class MoviesScreenFragment: Fragment() {
             override fun onQueryTextChange(text: String): Boolean {
                 viewModel.filterMoviesBySearch(text)
                 toggleVisibility( text.isEmpty(), binding.cancelButton)
-                toggleSearchViewIconColor(text.isNotEmpty())
+                toggleSearchViewIconColor(text.isNotEmpty(), requireContext(), binding.searchIcon)
                 return false
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.filterMoviesBySearch(query ?: "")
                 toggleVisibility( query?.isEmpty() ?:true, binding.cancelButton)
-                toggleSearchViewIconColor(query?.isNotEmpty() ?: false)
+                toggleSearchViewIconColor(query?.isNotEmpty() ?: false, requireContext(), binding.searchIcon)
                 return false
             }
         })
@@ -125,16 +124,6 @@ class MoviesScreenFragment: Fragment() {
         val nestedFragment: Fragment = NothingFoundFragment()
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
-    }
-    private fun toggleSearchViewIconColor(isNotEmpty: Boolean) {
-        val icon = binding.searchIcon
-
-        if (isNotEmpty) icon.setColorFilter(
-            context?.getColor(R.color.blue) ?: Color.BLACK
-        )
-        else icon.setColorFilter(
-            context?.getColor(R.color.grey) ?: Color.LTGRAY
-        )
     }
 
     override fun onDestroy() {
