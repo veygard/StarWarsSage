@@ -21,7 +21,7 @@ object Screens {
         PeopleScreenFragment.newInstance(movieUrl)
     }
 
-    fun planetScreen() = FragmentScreen{
-        PlanetScreenFragment()
+    fun planetScreen(planetUrl: String) = FragmentScreen{
+        PlanetScreenFragment.newInstance(planetUrl)
     }
 }

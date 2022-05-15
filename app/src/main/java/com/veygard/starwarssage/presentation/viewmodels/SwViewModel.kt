@@ -47,8 +47,6 @@ class SwViewModel @Inject constructor(
     val showToast: LiveData<ToastTypes?> = _showToast
 
 
-    var filterValue = ""
-
     fun getMovies() {
         viewModelScope.launch {
             _viewModelState.value = SwViewModelState.Loading
@@ -159,7 +157,6 @@ class SwViewModel @Inject constructor(
 
     fun filterMoviesBySearch(value: String) {
         viewModelScope.launch {
-            filterValue = value
 
             when {
                 value.isEmpty() -> {
@@ -188,8 +185,6 @@ class SwViewModel @Inject constructor(
 
     fun filterPeopleBySearch(value: String) {
         viewModelScope.launch {
-            filterValue = value
-
             when {
                 value.isEmpty() -> {
                     _viewModelState.value = SwViewModelState.GotPeopleByMovie

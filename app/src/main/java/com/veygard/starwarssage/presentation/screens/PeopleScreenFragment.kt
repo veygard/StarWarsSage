@@ -144,6 +144,7 @@ class PeopleScreenFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.cancelGetPeopleByMovieJob()
+        activity?.title = ""
         _binding = null
     }
 

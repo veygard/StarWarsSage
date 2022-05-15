@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
-import coil.transform.RoundedCornersTransformation
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.PersonItemBinding
 import com.veygard.starwarssage.domain.model.Person
@@ -33,7 +31,7 @@ class PersonListAdapter(private var personList: List<Person>, private val person
 
     class PersonViewHolder(
         private val binding: PersonItemBinding,
-        private val movieClick: PersonClickInterface?,
+        private val personClick: PersonClickInterface?,
         private val context: Context,
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
@@ -60,7 +58,7 @@ class PersonListAdapter(private var personList: List<Person>, private val person
 
 
         override fun onClick(p0: View?) {
-            person?.url?.let { movieClick?.onPersonClick(it) }
+            person?.homeworld?.let { personClick?.onPersonClick(it) }
         }
     }
 }
