@@ -24,7 +24,7 @@ import javax.inject.Inject
 private const val MOVIE_URL = "movie_url"
 
 @AndroidEntryPoint
-class PeopleScreenFragment : Fragment(), PersonClickInterface {
+class PeopleScreenFragment : Fragment() {
     private var movieUrl: String? = null
 
     private var _binding: FragmentScreenPeopleBinding? = null
@@ -66,16 +66,6 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
         observeData()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(viewModel.clickInterfaceHolder.value == null) viewModel.setClickInterface(this)
-        activity?.title = getString(R.string.movies_fragment_title)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if(viewModel.clickInterfaceHolder.value != null) viewModel.setClickInterface(null)
-    }
 
     private fun observeData() {
         viewModel.viewModelState.addObserver { result->
@@ -121,9 +111,17 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.cancelGetPeopleByMovieJob()
+        _binding = null
+    }
+
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        viewModel.cancelGetPeopleByMovieJob()
     }
 
     companion object {
@@ -134,8 +132,5 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
                     putString(MOVIE_URL, param)
                 }
             }
-    }
-
-    override fun onPersonClick(planetUrl: String) {
     }
 }

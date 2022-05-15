@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MoviesScreenFragment: Fragment(), MovieClickInterface {
+class MoviesScreenFragment: Fragment() {
 
     private var _binding: FragmentScreenMoviesBinding? = null
     private val binding get() = _binding!!
@@ -57,16 +57,6 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
         cancelButtonListener()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(viewModel.clickInterfaceHolder.value == null) viewModel.setClickInterface(this)
-        activity?.title = getString(R.string.movies_fragment_title)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if(viewModel.clickInterfaceHolder.value != null) viewModel.setClickInterface(null)
-    }
 
     private fun setListFragment() {
         val nestedFragment: Fragment = MovieListFragment()
@@ -124,9 +114,6 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
 
 
 
-    override fun onMovieClick(movieUrl: String) {
-        router.navigateTo(Screens.peopleScreen(movieUrl))
-    }
 
     private fun setShimmerFragment() {
         val nestedFragment: Fragment = ShimmerFragment()

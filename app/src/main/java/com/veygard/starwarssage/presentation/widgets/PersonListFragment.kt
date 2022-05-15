@@ -17,7 +17,7 @@ import com.veygard.starwarssage.presentation.adapters.PersonClickInterface
 import com.veygard.starwarssage.presentation.adapters.PersonListAdapter
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 
-class PersonListFragment: Fragment(R.layout.fragment_movie_list) {
+class PersonListFragment: Fragment(R.layout.fragment_movie_list), PersonClickInterface {
     private var _binding: FragmentPeopleListBinding? = null
     private val binding get() = _binding!!
 
@@ -39,7 +39,7 @@ class PersonListFragment: Fragment(R.layout.fragment_movie_list) {
 
 
         binding.recyclerPeopleList.also {
-            adapter = PersonListAdapter(personList = viewModel.peopleToShow.value?.toList() ?: emptyList(), viewModel.clickInterfaceHolder.value as PersonClickInterface, requireContext())
+            adapter = PersonListAdapter(personList = viewModel.peopleToShow.value?.toList() ?: emptyList(), this, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
@@ -49,7 +49,11 @@ class PersonListFragment: Fragment(R.layout.fragment_movie_list) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.cancelGetPeopleByMovieJob()
         _binding = null
+    }
+
+    override fun onPersonClick(planetUrl: String) {
     }
 
 }

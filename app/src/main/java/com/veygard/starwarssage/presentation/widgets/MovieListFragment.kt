@@ -8,13 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentMovieListBinding
 import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.presentation.adapters.MoviesListAdapter
+import com.veygard.starwarssage.presentation.navigation.Screens
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
+@AndroidEntryPoint
+class MovieListFragment: Fragment(R.layout.fragment_movie_list), MovieClickInterface {
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
@@ -22,6 +27,8 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
 
     private var adapter: MoviesListAdapter? = null
 
+    @Inject
+    lateinit var router: Router
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +43,7 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
 
 
         binding.recyclerMovieList.also {
-            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(), viewModel.clickInterfaceHolder.value as MovieClickInterface, requireContext())
+            adapter = MoviesListAdapter(moviesList = viewModel.moviesListToShow.value ?: emptyList(),  this, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
@@ -49,4 +56,7 @@ class MovieListFragment: Fragment(R.layout.fragment_movie_list) {
         _binding = null
     }
 
+    override fun onMovieClick(movieUrl: String) {
+        router.navigateTo(Screens.peopleScreen(movieUrl))
+    }
 }
