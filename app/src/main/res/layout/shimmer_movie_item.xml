@@ -29,31 +29,32 @@
 
 
         <LinearLayout
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
             <com.alexvasilkov.gestures.views.GestureImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:layout_gravity="center_horizontal"
                     tools:srcCompat="@tools:sample/avatars"
                     android:background="@color/shimmer_placeholder"
-                    android:layout_weight="1"
                     android:contentDescription="poster"
                     tools:ignore="HardcodedText,ImageContrastCheck"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp" />
 
             <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:layout_marginStart="64dp"
                     android:layout_marginEnd="8dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:background="@drawable/bg_grey_rounded"
@@ -63,7 +64,7 @@
                         />
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:background="@drawable/bg_grey_rounded"
@@ -72,7 +73,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="8dp" />
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textStyle="italic"
@@ -91,8 +92,9 @@
                 style="@style/Theme.StarWarsSage"
                 tools:text="@tools:sample/lorem/random"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="60dp"
                 android:paddingBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/bg_grey_rounded"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
