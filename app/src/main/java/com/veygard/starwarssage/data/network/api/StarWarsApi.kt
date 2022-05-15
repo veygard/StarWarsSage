@@ -1,6 +1,7 @@
 package com.veygard.starwarssage.data.network.api
 
 import com.veygard.starwarssage.data.network.response.*
+import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.domain.model.Person
 import com.veygard.starwarssage.domain.model.Planet
 import retrofit2.Response
@@ -16,6 +17,9 @@ interface StarWarsApi {
 
     @GET("films")
     suspend fun getAllFilmsApi(): Response<GetMoviesResponse>
+
+    @GET("films/{id}")
+    suspend fun getMovieApi(@Path("id") index:Int): Response<Movie>
 
     @GET("people")
     suspend fun getAllPeople(@Query("page") page: Int?): Response<GetPeopleResponse>

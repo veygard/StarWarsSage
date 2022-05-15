@@ -3,7 +3,8 @@ package com.veygard.starwarssage.domain.repository.network
 import com.veygard.starwarssage.domain.response.RequestResult
 
 interface NetworkRepository {
-    suspend fun getMovies(): RequestResult
+    suspend fun getAllMovies(): RequestResult
+    suspend fun getMovie(index: Int): RequestResult
 
     suspend fun downloadPlanets()
     suspend fun downloadPeople()

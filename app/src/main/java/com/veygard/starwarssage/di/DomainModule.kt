@@ -31,13 +31,13 @@ object DomainModule {
     @Singleton
     fun provideNetworkUseCases(
         networkRepository: NetworkRepository,
-        localDbRepository: LocalDbRepository
     ): NetworkUseCases = NetworkUseCases(
-        getMoviesUseCase = GetMoviesUseCase(repository = networkRepository),
+        getAllMoviesUseCase = GetAllMoviesUseCase(repository = networkRepository),
         getPersonUseCase = GetPersonUseCase(repository = networkRepository),
         getPlanetUseCase = GetPlanetUseCase(repository = networkRepository),
         getPlanetsUseCase = GetPlanetsUseCase(repository = networkRepository),
         getPeopleUseCase = GetPeopleUseCase(repository = networkRepository),
+        getMovieUseCase = GetMovieUseCase(repository = networkRepository)
     )
 
     @Provides

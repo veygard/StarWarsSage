@@ -13,7 +13,7 @@ class NetworkRepositoryImpl @Inject constructor(
 ) :
     NetworkRepository {
 
-    override suspend fun getMovies(): RequestResult {
+    override suspend fun getAllMovies(): RequestResult {
         var result: RequestResult =
             RequestResult.EnqueueError("StarWarsRepositoryImpl getMovies not working")
 
@@ -24,7 +24,7 @@ class NetworkRepositoryImpl @Inject constructor(
                     call.body()?.let {
 
                         it.results?.let { localDbRepository.insertMovies(it) }
-                        result = RequestResult.Success(ApiResponseType.GetMovies(it))
+                        result = RequestResult.Success(ApiResponseType.GetAllMovies(it))
 
                     } ?: run {
                         result = RequestResult.ServerError(
@@ -61,6 +61,48 @@ class NetworkRepositoryImpl @Inject constructor(
         return result
     }
 
+    override suspend fun getMovie(index: Int): RequestResult {
+        var result: RequestResult =
+            RequestResult.EnqueueError("StarWarsRepositoryImpl getMovies not working")
+        try {
+            val call = starWarsApi.getMovieApi(index)
+            when {
+                call.isSuccessful -> {
+                    call.body()?.let {
+                        result = RequestResult.Success(ApiResponseType.GetMovie(it))
+                    } ?: run {
+                        result = RequestResult.ServerError(
+                            error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
+                        )
+                    }
+                }
+                call.code() in 400..499 -> {
+                    result = RequestResult.ServerError(
+                        error = "Client Error: ${
+                            call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
+                        }"
+                    )
+                }
+                call.code() in 500..599 -> {
+                    result = RequestResult.ServerError(
+                        error = "Server Error: ${
+                            call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
+                        }"
+                    )
+
+                }
+                else -> {
+                    result = RequestResult.ServerError(
+                        error = "Unknown Error: ${
+                            call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
+                        }"
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            result = RequestResult.ConnectionError()
+        }
+        return result    }
 
 
     override suspend fun getPerson(index: Int): RequestResult {
