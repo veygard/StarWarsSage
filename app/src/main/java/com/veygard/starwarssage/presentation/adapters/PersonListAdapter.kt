@@ -53,10 +53,7 @@ class PersonListAdapter(private var personList: List<Person>, private val person
                     error(R.drawable.ic_movie_error)
                 }
             }
-
         }
-
-
         override fun onClick(p0: View?) {
             person?.homeworld?.let { personClick?.onPersonClick(it) }
         }

@@ -64,10 +64,13 @@ class SwViewModel @Inject constructor(
 
     fun getMovie(url: String) {
         viewModelScope.launch {
+            Log.e("SwViewModel", "getMovie start, url: $url")
+
             _viewModelState.value = SwViewModelState.Loading
             val result = localUseCases.getLocalMovieUseCase.start(url)
             result?.let {
                 _viewModelState.value = SwViewModelState.GotMovie(it)
+                Log.e("SwViewModel", "getMovie result")
             } ?: kotlin.run {
                 getMovieFromServer(url)
             }
@@ -113,15 +116,14 @@ class SwViewModel @Inject constructor(
         viewModelScope.launch(getPeopleByMovieJob) {
             _peopleToShow.value = null
             _viewModelState.value = SwViewModelState.Loading
-            Log.e("get_ppl_result", "movie url: ${movie.url}")
+            Log.e("SwViewModel", "getPeopleByMovie movie url: ${movie.url}")
             //получаем персонажей из бд или от сервера
             val personList = mutableSetOf<Person>()
             movie.characters?.forEach { personUrl ->
                 val result = localUseCases.getLocalPersonUseCase.start(personUrl)
-                Log.e("get_ppl_result", "person: ${result?.name ?: "not found"}")
                 result?.let {
                     personList.add(it)
-                    Log.e("get_ppl_result", "person local found: ${result.name}")
+                    Log.e("SwViewModel", "person local found: ${result.name}")
                 } ?: kotlin.run {
                     try {
                         val indexStr = personUrl.substringAfter("people/").replace("/", "")
@@ -131,7 +133,7 @@ class SwViewModel @Inject constructor(
                                 (serverResult.response as ApiResponseType.GetPerson).person.let {
                                     personList.add(it)
                                 }
-                                Log.e("get_ppl_result", "person server download: ${result?.name}")
+                                Log.e("SwViewModel", "person server download: ${result?.name}")
                             }
                             else -> {}
                         }
@@ -144,11 +146,15 @@ class SwViewModel @Inject constructor(
             _peopleToShow.value = personList.toList()
             originalPersonList = _peopleToShow.value?.toList()
             _viewModelState.value = SwViewModelState.GotPeopleByMovie
+            Log.e("SwViewModel", "getPeopleByMovie ended, ${_peopleToShow.value?.size}")
         }
     }
 
-    fun cancelGetPeopleByMovieJob() {
-        if (getPeopleByMovieJob.isActive) getPeopleByMovieJob.cancel()
+    fun cancelGetPeopleByMovieJob(from: String) {
+        if (getPeopleByMovieJob.isActive) {
+            getPeopleByMovieJob.cancel()
+            Log.e("SwViewModel", "cancelGetPeopleByMovieJob, active ${getPeopleByMovieJob.isActive}, from $from")
+        }
     }
 
     fun setStateNull() {

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -44,7 +45,6 @@ class PeopleScreenFragment : Fragment() {
         arguments?.let {
             movieUrl = it.getString(MOVIE_URL)
         }
-
         movieUrl?.let {
             viewModel.getMovie(it)
         } ?: kotlin.run {
@@ -64,6 +64,9 @@ class PeopleScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("PeopleScreenFragment", "movie url $movieUrl")
+
+
+
         observeData()
         searchViewListener()
         cancelButtonListener()
@@ -75,21 +78,13 @@ class PeopleScreenFragment : Fragment() {
             when(result){
                 is SwViewModelState.GotMovie -> {
                     activity?.title = result.movie.title
+                    Log.e("PeopleScreenFragment", "SwViewModelState.GotMovie")
                     /* вызываем загрузку персонажей у этого фильма */
                     viewModel.getPeopleByMovie(result.movie)
                 }
-                SwViewModelState.GotMovies -> {}
-                SwViewModelState.GotMoviesLocal -> {
-
-                }
-                is SwViewModelState.GotPerson -> {}
-                is SwViewModelState.GotPlanet -> {}
                 SwViewModelState.Loading -> setShimmerFragment()
                 SwViewModelState.NotFound -> setNothingFoundFragment()
-                is SwViewModelState.ServerError -> {}
-                SwViewModelState.GotPeopleByMovie -> {
-                    setListFragment()
-                }
+                SwViewModelState.GotPeopleByMovie ->   setListFragment()
             }
 
         }
@@ -140,10 +135,9 @@ class PeopleScreenFragment : Fragment() {
     }
 
 
-
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.cancelGetPeopleByMovieJob()
+        viewModel.cancelGetPeopleByMovieJob("People fragment onDestroyView")
         activity?.title = ""
         _binding = null
     }
@@ -152,7 +146,6 @@ class PeopleScreenFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        viewModel.cancelGetPeopleByMovieJob()
     }
 
     companion object {

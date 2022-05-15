@@ -56,7 +56,6 @@ class PersonListFragment: Fragment(R.layout.fragment_movie_list), PersonClickInt
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.cancelGetPeopleByMovieJob()
         _binding = null
     }
 

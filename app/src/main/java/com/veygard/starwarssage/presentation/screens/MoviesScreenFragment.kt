@@ -1,11 +1,13 @@
 package com.veygard.starwarssage.presentation.screens
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
@@ -33,6 +35,7 @@ class MoviesScreenFragment: Fragment() {
     @Inject
     lateinit var router:Router
 
+    private var childFrManager: FragmentManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,7 @@ class MoviesScreenFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScreenMoviesBinding.inflate(inflater, container, false)
+        childFrManager= childFragmentManager
         return binding.root
     }
 
@@ -59,8 +63,8 @@ class MoviesScreenFragment: Fragment() {
 
     private fun setListFragment() {
         val nestedFragment: Fragment = MovieListFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.movie_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
     private fun searchViewListener() {
@@ -116,14 +120,14 @@ class MoviesScreenFragment: Fragment() {
 
     private fun setShimmerFragment() {
         val nestedFragment: Fragment = ShimmerFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.movie_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
     private fun setNothingFoundFragment() {
         val nestedFragment: Fragment = NothingFoundFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.movie_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
     override fun onDestroy() {
