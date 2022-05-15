@@ -28,7 +28,6 @@ class SwViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
     private val _viewModelState: MutableLiveData<SwViewModelState?> = MutableLiveData(null)
     val viewModelState: LiveData<SwViewModelState?> = _viewModelState
 
@@ -37,9 +36,9 @@ class SwViewModel @Inject constructor(
     val moviesListToShow: LiveData<List<Movie>?> = _moviesListToShow
 
     private var originalPersonList: List<Person>? = null
-    private val _peopleToShow: MutableLiveData<MutableSet<Person>?> =
-        MutableLiveData(mutableSetOf())
-    val peopleToShow: LiveData<MutableSet<Person>?> = _peopleToShow
+    private val _peopleToShow: MutableLiveData<List<Person>?> =
+        MutableLiveData(null)
+    val peopleToShow: LiveData<List<Person>?> = _peopleToShow
 
     private val _loadingState: MutableLiveData<Boolean> = MutableLiveData(false)
     val loadingState: LiveData<Boolean> = _loadingState
@@ -114,15 +113,16 @@ class SwViewModel @Inject constructor(
 
     fun getPeopleByMovie(movie: Movie) {
         viewModelScope.launch(getPeopleByMovieJob) {
-            _peopleToShow.value?.clear()
+            _peopleToShow.value = null
             _viewModelState.value = SwViewModelState.Loading
             Log.e("get_ppl_result", "movie url: ${movie.url}")
             //получаем персонажей из бд или от сервера
+            val personList = mutableSetOf<Person>()
             movie.characters?.forEach { personUrl ->
                 val result = localUseCases.getLocalPersonUseCase.start(personUrl)
                 Log.e("get_ppl_result", "person: ${result?.name ?: "not found"}")
                 result?.let {
-                    _peopleToShow.value?.add(it)
+                    personList.add(it)
                     Log.e("get_ppl_result", "person local found: ${result.name}")
                 } ?: kotlin.run {
                     try {
@@ -131,7 +131,7 @@ class SwViewModel @Inject constructor(
                         when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
                             is RequestResult.Success -> {
                                 (serverResult.response as ApiResponseType.GetPerson).person.let {
-                                    _peopleToShow.value?.add(it)
+                                    personList.add(it)
                                 }
                                 Log.e("get_ppl_result", "person server download: ${result?.name}")
                             }
@@ -143,7 +143,8 @@ class SwViewModel @Inject constructor(
                 }
             }
             //показываем получившийся список
-            originalPersonList= _peopleToShow.value?.toList()
+            _peopleToShow.value = personList.toList()
+            originalPersonList = _peopleToShow.value?.toList()
             _viewModelState.value = SwViewModelState.GotPeopleByMovie
         }
     }
@@ -192,7 +193,7 @@ class SwViewModel @Inject constructor(
             when {
                 value.isEmpty() -> {
                     _viewModelState.value = SwViewModelState.GotPeopleByMovie
-                    _peopleToShow.value = originalPersonList?.toMutableSet()
+                    _peopleToShow.value = originalPersonList
                 }
                 else -> {
                     val newSet = originalPersonList?.filter {
@@ -206,7 +207,7 @@ class SwViewModel @Inject constructor(
                         newSet.isEmpty() -> _viewModelState.value = SwViewModelState.NotFound
                         newSet.isNotEmpty() -> {
                             _viewModelState.value = SwViewModelState.GotPeopleByMovie
-                            _peopleToShow.value = newSet.toMutableSet()
+                            _peopleToShow.value = newSet
                         }
                     }
                 }

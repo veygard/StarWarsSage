@@ -39,7 +39,7 @@ class PersonListFragment: Fragment(R.layout.fragment_movie_list), PersonClickInt
 
 
         binding.recyclerPeopleList.also {
-            adapter = PersonListAdapter(personList = viewModel.peopleToShow.value?.toList() ?: emptyList(), this, requireContext())
+            adapter = PersonListAdapter(personList = viewModel.peopleToShow.value ?: emptyList(), this, requireContext())
             it.adapter= adapter
             it.layoutManager= LinearLayoutManager(requireContext())
             val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
