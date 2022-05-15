@@ -1,13 +1,11 @@
 package com.veygard.starwarssage.presentation.screens
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
@@ -69,7 +67,7 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
     private fun setListFragment() {
         val nestedFragment: Fragment = MovieListFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.list_container, nestedFragment).commitAllowingStateLoss()
+        transaction.replace(R.id.movie_list_container, nestedFragment).commitAllowingStateLoss()
     }
 
     private fun searchViewListener() {
@@ -129,13 +127,13 @@ class MoviesScreenFragment: Fragment(), MovieClickInterface {
     private fun setShimmerFragment() {
         val nestedFragment: Fragment = ShimmerFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.list_container, nestedFragment).commit()
+        transaction.replace(R.id.movie_list_container, nestedFragment).commit()
     }
 
     private fun setNothingFoundFragment() {
         val nestedFragment: Fragment = NothingFoundFragment()
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.list_container, nestedFragment).commit()
+        transaction.replace(R.id.movie_list_container, nestedFragment).commit()
     }
     private fun toggleSearchViewIconColor(isNotEmpty: Boolean) {
         val icon = binding.searchIcon

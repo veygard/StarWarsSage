@@ -15,4 +15,8 @@
     <string name="critical_error_screen_text">Проверьте подключение к интернет</string>
     <string name="critical_error_screen_again">Попробовать снова</string>
 
+    <string name="person_item_sex">Пол: %1$s</string>
+    <string name="person_item_born_date">Дата рождения: %1$s</string>
+    <string name="person_item_episode">Эпизод: %1$d</string>
+
 </resources>
