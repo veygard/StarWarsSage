@@ -18,7 +18,8 @@ data class Person(
     val species: List<String>? = null,
     val starships: List<String>? = null,
     val url: String? = null,
-    val vehicles: List<String>? = null
+    val vehicles: List<String>? = null,
+    var avatarUrl:String?= null
 )
 
 fun Person.toEntity() = PersonEntity(
@@ -37,5 +38,6 @@ fun Person.toEntity() = PersonEntity(
     species = this.species,
     starships = this.starships,
     url = this.url ?: "",
-    vehicles = this.vehicles
+    vehicles = this.vehicles,
+    avatarUrl= avatarUrl
 )

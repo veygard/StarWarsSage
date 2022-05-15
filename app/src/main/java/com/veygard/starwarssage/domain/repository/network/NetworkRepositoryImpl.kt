@@ -2,9 +2,12 @@ package com.veygard.starwarssage.domain.repository.network
 
 import android.util.Log
 import com.veygard.starwarssage.data.network.api.StarWarsApi
+import com.veygard.starwarssage.domain.model.PersonWithAvatar
 import com.veygard.starwarssage.domain.repository.local.LocalDbRepository
 import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
+import com.veygard.starwarssage.util.Constants.AVATAR_URL
+import com.veygard.starwarssage.util.Constants.AVATAR_URL_ENDINGS
 import javax.inject.Inject
 
 class NetworkRepositoryImpl @Inject constructor(
@@ -102,7 +105,8 @@ class NetworkRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             result = RequestResult.ConnectionError()
         }
-        return result    }
+        return result
+    }
 
 
     override suspend fun getPerson(index: Int): RequestResult {
@@ -114,8 +118,13 @@ class NetworkRepositoryImpl @Inject constructor(
             when {
                 call.isSuccessful -> {
                     call.body()?.let {
-                        result = RequestResult.Success(ApiResponseType.GetPerson(it))
-                        localDbRepository.insertPerson(it)
+                        val person = it
+                        getPersonAvatar(index.toString())?.let {  pwa->
+                            if(pwa.name == person.name) person.avatarUrl = pwa.image
+                        }
+                        result = RequestResult.Success(ApiResponseType.GetPerson(person))
+                        localDbRepository.insertPerson(person)
+
                     } ?: run {
                         result = RequestResult.ServerError(
                             error = call.errorBody()?.source()?.buffer?.snapshot()?.utf8()
@@ -149,6 +158,26 @@ class NetworkRepositoryImpl @Inject constructor(
             result = RequestResult.ConnectionError()
         }
         return result
+    }
+
+    override suspend fun getPersonAvatar(index: String?): PersonWithAvatar? {
+        var person: PersonWithAvatar? = null
+        index?.let { i ->
+            try {
+                val url = AVATAR_URL + i + AVATAR_URL_ENDINGS
+                val call = starWarsApi.getAvatarUrl(url)
+                when {
+                    call.isSuccessful -> {
+                        call.body()?.let {
+                            person = it
+                        }
+                    }
+                    else -> {}
+                }
+            } catch (e: Exception) {
+            }
+        }
+        return person
     }
 
     override suspend fun getPlanet(index: Int): RequestResult {
@@ -213,9 +242,7 @@ class NetworkRepositoryImpl @Inject constructor(
                                 it.forEach { planet ->
                                     localDbRepository.insertPlanet(planet)
                                 }
-
                             }
-
                         } ?: run {
                             gotMorePages = false
                             pageCounter = 0
@@ -241,7 +268,6 @@ class NetworkRepositoryImpl @Inject constructor(
         var pageCounter = 0
         var gotMorePages = true
 
-
         try {
             while (gotMorePages) {
                 val call = getPeopleByPage(if (pageCounter == 0) null else pageCounter)
@@ -252,7 +278,13 @@ class NetworkRepositoryImpl @Inject constructor(
                             pageCounter++
                             call.body()?.results?.let {
                                 it.forEach { person ->
-                                    localDbRepository.insertPerson(person)
+                                    val p= person
+                                    val indexStr =
+                                        person.url?.substringAfter("people/")?.replace("/", "")
+                                    getPersonAvatar(indexStr)?.let {  pwa->
+                                        if(pwa.name == p.name) p.avatarUrl = pwa.image
+                                    }
+                                    localDbRepository.insertPerson(p)
                                 }
                             }
                         } ?: run {

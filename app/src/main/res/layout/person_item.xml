@@ -11,57 +11,64 @@
         android:elevation="4dp"
         android:layout_centerHorizontal="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:id="@+id/person_linear_container"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+        <ImageView
+                app:strokeColor="@color/transparent"
+                app:strokeWidth="1dp"
+                android:id="@+id/person_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_width="94dp"
+                android:scaleType="fitCenter"
+                android:layout_height="130dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/app_name"
+                android:cropToPadding="true"
+                android:adjustViewBounds="true" />
 
         <TextView
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 style="@style/Theme.StarWarsSage"
                 tools:text="@tools:sample/lorem"
-                android:layout_width="match_parent"
-                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="@id/person_avatar"
+                app:layout_constraintStart_toEndOf="@id/person_avatar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/person_item_title"
-                android:layout_marginTop="16dp" />
+                android:layout_marginStart="8dp"
+                android:id="@+id/person_item_title" />
 
 
         <TextView
+                app:layout_constraintStart_toStartOf="@id/person_item_title"
+                app:layout_constraintTop_toBottomOf="@id/person_item_title"
                 android:text="@string/person_item_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
                 android:textStyle="italic"
                 style="@style/Theme.StarWarsSage"
-                android:id="@+id/person_item_sex"
-                android:layout_marginStart="8dp" />
+                android:id="@+id/person_item_sex" />
 
         <TextView
                 android:text="@string/person_item_born_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/person_item_sex"
+                app:layout_constraintStart_toStartOf="@id/person_item_title"
+                android:textSize="14sp"
                 android:textStyle="italic"
                 style="@style/Theme.StarWarsSage"
                 android:id="@+id/person_item_born_date"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp" />
+                android:layout_marginTop="8dp" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-                app:strokeColor="@color/transparent"
-                app:strokeWidth="1dp"
-                android:id="@+id/user_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/app_name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
-                android:paddingBottom="24dp"
-                app:layout_constraintBottom_toBottomOf="parent" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

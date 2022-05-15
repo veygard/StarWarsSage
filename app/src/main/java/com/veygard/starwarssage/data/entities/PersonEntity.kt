@@ -24,7 +24,8 @@ data class PersonEntity(
     val species: List<String>? = null,
     val starships: List<String>? = null,
     @PrimaryKey(autoGenerate = false)val url: String,
-    val vehicles: List<String>? = null
+    val vehicles: List<String>? = null,
+    val avatarUrl:String?= null
 ): Parcelable
 
 fun PersonEntity.toDomain() = Person(
@@ -43,5 +44,6 @@ fun PersonEntity.toDomain() = Person(
     species = this.species,
     starships = this.starships,
     url = this.url ?: "",
-    vehicles = this.vehicles
+    vehicles = this.vehicles,
+    avatarUrl= avatarUrl
 )

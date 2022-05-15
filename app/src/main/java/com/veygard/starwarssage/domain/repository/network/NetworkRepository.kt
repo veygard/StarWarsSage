@@ -1,5 +1,6 @@
 package com.veygard.starwarssage.domain.repository.network
 
+import com.veygard.starwarssage.domain.model.PersonWithAvatar
 import com.veygard.starwarssage.domain.response.RequestResult
 
 interface NetworkRepository {
@@ -10,5 +11,7 @@ interface NetworkRepository {
     suspend fun downloadPeople()
 
     suspend fun getPerson(index:Int) : RequestResult
+    suspend fun getPersonAvatar(index: String?): PersonWithAvatar?
+
     suspend fun getPlanet(index:Int) : RequestResult
 }

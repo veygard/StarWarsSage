@@ -3,12 +3,10 @@ package com.veygard.starwarssage.data.network.api
 import com.veygard.starwarssage.data.network.response.*
 import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.domain.model.Person
+import com.veygard.starwarssage.domain.model.PersonWithAvatar
 import com.veygard.starwarssage.domain.model.Planet
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface StarWarsApi {
     @Headers(
@@ -32,4 +30,8 @@ interface StarWarsApi {
 
     @GET("planets/{id}")
     suspend fun getPlanetApi(@Path("id") index:Int): Response<Planet>
+
+    @GET()
+    suspend fun getAvatarUrl(@Url url: String): Response<PersonWithAvatar>
+
 }

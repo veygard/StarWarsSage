@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
@@ -31,6 +32,8 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
 
     private val viewModel: SwViewModel by activityViewModels()
 
+    private var childFrManager: FragmentManager? = null
+
     @Inject
     lateinit var router: Router
 
@@ -53,6 +56,7 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScreenPeopleBinding.inflate(inflater, container, false)
+        childFrManager= childFragmentManager
         return binding.root
     }
 
@@ -100,8 +104,8 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
 
     private fun setShimmerFragment() {
         val nestedFragment: Fragment = ShimmerFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.people_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.people_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
     private fun setNothingFoundFragment() {
@@ -112,8 +116,8 @@ class PeopleScreenFragment : Fragment(), PersonClickInterface {
 
     private fun setListFragment() {
         val nestedFragment: Fragment = PersonListFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.people_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.people_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
 

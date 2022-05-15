@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.PersonItemBinding
 import com.veygard.starwarssage.domain.model.Person
@@ -46,6 +49,11 @@ class PersonListAdapter(private var personList: List<Person>, private val person
                 personItemTitle.text= person.name
                 personItemSex.text = context.getString(R.string.person_item_sex, person.gender)
                 personItemBornDate.text = context.getString(R.string.person_item_born_date, person.birth_year)
+                personAvatar.load(person.avatarUrl){
+                    crossfade(true)
+                    placeholder(R.drawable.ic_movie_error)
+                    error(R.drawable.ic_movie_error)
+                }
             }
 
         }
