@@ -28,9 +28,9 @@ interface StarWarsDao {
     suspend fun getMovieDao(url: String): MovieEntity?
 
     @Query("SELECT * FROM people_table where url = :url")
-    fun getPersonDao(url: String): PersonEntity
+    fun getPersonDao(url: String): PersonEntity?
 
     @Query("SELECT * FROM planet_table where url = :url")
-    fun getPlanetDao(url: String): PersonEntity
+    fun getPlanetDao(url: String): PlanetEntity?
 
 }

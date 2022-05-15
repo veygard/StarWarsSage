@@ -30,11 +30,13 @@ class LocalDbRepositoryImpl @Inject constructor(private val starWarsDatabase: St
        return starWarsDatabase.getMovieDao(url)?.toDomain()
     }
 
-    override suspend fun getPerson(url:String) {
-
+    override suspend fun getPerson(url: String): Person? {
+        return starWarsDatabase.getPersonDao(url)?.toDomain()
     }
 
-    override suspend fun getPlanet(url:String) {
-
+    override suspend fun getPlanet(url: String): Planet? {
+        return starWarsDatabase.getPlanetDao(url)?.toDomain()
     }
+
+
 }
