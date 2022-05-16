@@ -119,10 +119,8 @@ class MoviesScreenFragment : Fragment() {
                 is SwViewModelState.GotMovies -> {
                     Log.e("get_movies", "observer got movies")
                     setListFragment()
-                }
-                is SwViewModelState.GotMoviesLocal -> {
-                    Log.e("get_movies", "observer local got movies")
-                    setListFragment()
+                    _binding?.searchBar?.visibility = View.VISIBLE
+                    _binding?.searchIcon?.visibility = View.VISIBLE
                 }
                 is SwViewModelState.ServerError -> {
                     router.navigateTo(Screens.errorScreen())

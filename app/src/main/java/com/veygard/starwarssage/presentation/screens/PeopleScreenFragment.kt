@@ -108,6 +108,8 @@ class PeopleScreenFragment : Fragment() {
                 SwViewModelState.NotFound -> setNothingFoundFragment()
                 SwViewModelState.GotPeopleByMovie -> {
                     setListFragment()
+                    _binding?.peopleSearchBar?.visibility = View.VISIBLE
+                    _binding?.peopleSearchIcon?.visibility = View.VISIBLE
                     toast?.cancel()
                 }
             }

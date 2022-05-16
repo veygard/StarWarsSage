@@ -53,7 +53,7 @@ class SwViewModel @Inject constructor(
                 result.isNotEmpty() -> {
                     originalMovieList = result.sortedBy { it.episode_id }
                     _moviesListToShow.value = originalMovieList
-                    _viewModelState.value = SwViewModelState.GotMoviesLocal
+                    _viewModelState.value = SwViewModelState.GotMovies
                 }
             }
         }
@@ -143,7 +143,6 @@ class SwViewModel @Inject constructor(
                         val index = indexStr.toInt()
                         when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
                             is RequestResult.Success -> {
-
                                 (serverResult.response as ApiResponseType.GetPerson).person.let {
                                     personSet.add(it)
                                     _showToast.value = null
@@ -151,7 +150,7 @@ class SwViewModel @Inject constructor(
                                 }
                                 Log.e("SwViewModel", "person server download: ${ personSet.size.toString()} из ${movie.characters.size.toString()}")
                             }
-                            else -> {}
+                            
                         }
                     } catch (e: Exception) {
                         _showToast.value = ToastTypes.AppError
@@ -161,6 +160,7 @@ class SwViewModel @Inject constructor(
             //показываем получившийся список
             _peopleToShow.value = personSet.toList()
             originalPersonList = _peopleToShow.value?.toList()
+            _showToast.value = null
             _viewModelState.value = SwViewModelState.GotPeopleByMovie
             Log.e("SwViewModel", "getPeopleByMovie ended, ${_peopleToShow.value?.size}")
         }
@@ -185,7 +185,7 @@ class SwViewModel @Inject constructor(
 
             when {
                 value.isEmpty() -> {
-                    _viewModelState.value = SwViewModelState.GotMoviesLocal
+                    _viewModelState.value = SwViewModelState.GotMovies
                     _moviesListToShow.value = originalMovieList
                 }
                 else -> {
@@ -199,7 +199,7 @@ class SwViewModel @Inject constructor(
                     when {
                         newList.isEmpty() -> _viewModelState.value = SwViewModelState.NotFound
                         newList.isNotEmpty() -> {
-                            _viewModelState.value = SwViewModelState.GotMoviesLocal
+                            _viewModelState.value = SwViewModelState.GotMovies
                             _moviesListToShow.value = newList
                         }
                     }

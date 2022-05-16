@@ -8,7 +8,6 @@ import com.veygard.starwarssage.domain.response.RequestResult
 
 sealed class SwViewModelState {
     object GotMovies: SwViewModelState()
-    object GotMoviesLocal: SwViewModelState()
     data class GotMovie(val movie: Movie): SwViewModelState()
     object GotPeopleByMovie: SwViewModelState()
     object NotFound: SwViewModelState()
