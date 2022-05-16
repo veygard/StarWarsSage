@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenPeopleBinding
+import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.presentation.navigation.Screens
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
@@ -39,6 +40,8 @@ class PeopleScreenFragment : Fragment() {
     @Inject
     lateinit var router: Router
 
+    private var movie: Movie? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,7 @@ class PeopleScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScreenPeopleBinding.inflate(inflater, container, false)
-        childFrManager= childFragmentManager
+        childFrManager = childFragmentManager
         return binding.root
     }
 
@@ -65,26 +68,29 @@ class PeopleScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("PeopleScreenFragment", "movie url $movieUrl")
 
-
-
         observeData()
         searchViewListener()
         cancelButtonListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+        movie?.let { activity?.title = it.title }
+    }
 
     private fun observeData() {
-        viewModel.viewModelState.addObserver { result->
-            when(result){
+        viewModel.viewModelState.addObserver { result ->
+            when (result) {
                 is SwViewModelState.GotMovie -> {
-                    activity?.title = result.movie.title
+
+                    movie = result.movie
                     Log.e("PeopleScreenFragment", "SwViewModelState.GotMovie")
                     /* вызываем загрузку персонажей у этого фильма */
                     viewModel.getPeopleByMovie(result.movie)
                 }
                 SwViewModelState.Loading -> setShimmerFragment()
                 SwViewModelState.NotFound -> setNothingFoundFragment()
-                SwViewModelState.GotPeopleByMovie ->   setListFragment()
+                SwViewModelState.GotPeopleByMovie -> setListFragment()
             }
 
         }
@@ -113,15 +119,23 @@ class PeopleScreenFragment : Fragment() {
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(text: String): Boolean {
                 viewModel.filterPeopleBySearch(text)
-                toggleVisibility( text.isEmpty(), binding.peopleCancelButton)
-                toggleSearchViewIconColor(text.isNotEmpty(), requireContext(), binding.peopleSearchIcon)
+                toggleVisibility(text.isEmpty(), binding.peopleCancelButton)
+                toggleSearchViewIconColor(
+                    text.isNotEmpty(),
+                    requireContext(),
+                    binding.peopleSearchIcon
+                )
                 return false
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.filterPeopleBySearch(query ?: "")
-                toggleVisibility( query?.isEmpty() ?:true, binding.peopleCancelButton)
-                toggleSearchViewIconColor(query?.isNotEmpty() ?: false, requireContext(), binding.peopleSearchIcon)
+                toggleVisibility(query?.isEmpty() ?: true, binding.peopleCancelButton)
+                toggleSearchViewIconColor(
+                    query?.isNotEmpty() ?: false,
+                    requireContext(),
+                    binding.peopleSearchIcon
+                )
                 return false
             }
         })
