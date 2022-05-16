@@ -62,6 +62,7 @@ class PlanetScreenFragment : Fragment() {
         super.onResume()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(true)
+        binding.planetTable.visibility = View.INVISIBLE
     }
 
     override fun onStop() {
@@ -72,6 +73,7 @@ class PlanetScreenFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.planetTable.visibility = View.INVISIBLE
         _binding = null
         viewModel.clear()
     }
