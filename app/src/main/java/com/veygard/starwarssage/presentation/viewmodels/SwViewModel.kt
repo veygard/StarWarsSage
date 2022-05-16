@@ -124,6 +124,7 @@ class SwViewModel @Inject constructor(
         }
 
     fun getPeopleByMovie(movie: Movie) {
+         if (getPeopleByMovieJob.isActive) cancelGetPeopleByMovieJob("getPeopleByMovie")
         viewModelScope.launch(getPeopleByMovieJob) {
             Log.e("SwViewModel", "getPeopleByMovie job state: ${getPeopleByMovieJob.isActive}")
             _peopleToShow.value = null
@@ -146,9 +147,9 @@ class SwViewModel @Inject constructor(
                                 (serverResult.response as ApiResponseType.GetPerson).person.let {
                                     personSet.add(it)
                                     _showToast.value = null
-                                    _showToast.value = ToastTypes.Download(current = personSet.size.toString(), all=movie.characters.size.toString())
+                                    _showToast.value = ToastTypes.DownloadPeople(current = personSet.size.toString(), all=movie.characters.size.toString())
                                 }
-                                Log.e("SwViewModel", "person server download: ${serverResult.response.person.name}")
+                                Log.e("SwViewModel", "person server download: ${ personSet.size.toString()} из ${movie.characters.size.toString()}")
                             }
                             else -> {}
                         }
@@ -240,6 +241,7 @@ class SwViewModel @Inject constructor(
 
     private fun getMoviesFromServer() {
         viewModelScope.launch {
+            _showToast.value = ToastTypes.DownloadMovie
             delay(2000) //показ шиммера
             when (val result = networkUseCases.getAllMoviesUseCase.start()) {
                 is RequestResult.Success -> {
@@ -254,8 +256,6 @@ class SwViewModel @Inject constructor(
                         _viewModelState.value =
                             SwViewModelState.ServerError(RequestResult.NoMoviesError("don't have movies"))
                     }
-//                    networkUseCases.getPeopleUseCase.start()
-//                    networkUseCases.getPlanetsUseCase.start()
                     Log.e("get_movies", "state ended ")
                 }
 

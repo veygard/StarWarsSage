@@ -15,6 +15,7 @@
     <color name="transparent">#00000000 </color>
     <color name="grey">#007C7979</color>
     <color name="error">#F44336</color>
+    <color name="toast_back">#7804CA</color>
     <color name="actionBarText">#514F4F</color>
 
 </resources>

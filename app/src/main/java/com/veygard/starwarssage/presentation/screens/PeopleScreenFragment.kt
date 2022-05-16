@@ -26,6 +26,7 @@ import com.veygard.starwarssage.presentation.widgets.PersonListFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
 import com.veygard.starwarssage.presentation.widgets.getToastFields
 import com.veygard.starwarssage.util.CustomToast
+import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -116,7 +117,7 @@ class PeopleScreenFragment : Fragment() {
             result?.let {
                 val fields = getToastFields(it, activity?.applicationContext)
                 fields?.let {
-                    toast?.let {t ->
+                    toast?.let {
                         toast!!.cancel()
                         toast = CustomToast(requireContext(),
                             message = fields.text,
