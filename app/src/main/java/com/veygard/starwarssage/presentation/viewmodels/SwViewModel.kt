@@ -150,7 +150,12 @@ class SwViewModel @Inject constructor(
                                 }
                                 Log.e("SwViewModel", "person server download: ${ personSet.size.toString()} из ${movie.characters.size.toString()}")
                             }
-                            
+                            is RequestResult.ConnectionError -> {
+                                delay(500)
+                                if(getPeopleByMovieJob.isActive) _viewModelState.value = SwViewModelState.ServerError(serverResult)
+                                else{ }
+                            }
+                            else -> {}
                         }
                     } catch (e: Exception) {
                         _showToast.value = ToastTypes.AppError

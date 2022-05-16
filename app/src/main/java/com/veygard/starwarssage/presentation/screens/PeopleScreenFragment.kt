@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -26,7 +25,6 @@ import com.veygard.starwarssage.presentation.widgets.PersonListFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
 import com.veygard.starwarssage.presentation.widgets.getToastFields
 import com.veygard.starwarssage.util.CustomToast
-import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -112,6 +110,9 @@ class PeopleScreenFragment : Fragment() {
                     _binding?.peopleSearchIcon?.visibility = View.VISIBLE
                     toast?.cancel()
                 }
+                is SwViewModelState.ServerError ->{
+                    router.navigateTo(Screens.errorScreen())
+                }
             }
         }
 
@@ -150,8 +151,8 @@ class PeopleScreenFragment : Fragment() {
 
     private fun setNothingFoundFragment() {
         val nestedFragment: Fragment = NothingFoundFragment()
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.people_list_container, nestedFragment).commitAllowingStateLoss()
+        val transaction = childFrManager?.beginTransaction()
+        transaction?.replace(R.id.people_list_container, nestedFragment)?.commitAllowingStateLoss()
     }
 
     private fun setListFragment() {
