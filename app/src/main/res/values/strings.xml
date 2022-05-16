@@ -18,5 +18,12 @@
     <string name="person_item_sex">Пол: %1$s</string>
     <string name="person_item_born_date">Год рождения: %1$s</string>
     <string name="person_item_episode">Эпизод: %1$d</string>
+    <string name="planet_rotation_period">Суточное вращение:</string>
+    <string name="planet_orbital_period">Период обращения\nвокруг звезды:</string>
+    <string name="planet_diameter">"Диаметр:"</string>
+    <string name="planet_gravity">Гравитация:</string>
+    <string name="planet_terrain">"Ландшафт:"</string>
+    <string name="planet_population">Численность населения:</string>
+    <string name="planet_climate">Климат:</string>
 
 </resources>

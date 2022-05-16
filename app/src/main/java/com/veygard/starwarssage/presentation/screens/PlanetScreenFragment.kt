@@ -2,10 +2,7 @@ package com.veygard.starwarssage.presentation.screens
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -99,6 +96,17 @@ class PlanetScreenFragment : Fragment() {
     }
 
     private fun setFields() {
+        _binding?.apply {
+            planetRotationPeriod.text = planet?.rotation_period
+            planetRotationPeriod.text = planet?.rotation_period
+            planetOrbitalPeriod.text = planet?.orbital_period
+            planetDiameter.text = planet?.diameter
+            planetClimate.text = planet?.climate
+            planetGravity.text = planet?.gravity
+            planetTerrain.text = planet?.terrain
+            planetPopulation.text = planet?.population
+            planetTable.visibility= View.VISIBLE
+        }
     }
 
 
