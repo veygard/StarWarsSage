@@ -1,6 +1,8 @@
 package com.veygard.starwarssage
 
+import android.app.PendingIntent.getActivity
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.github.terrakok.cicerone.Command
 import com.github.terrakok.cicerone.Navigator

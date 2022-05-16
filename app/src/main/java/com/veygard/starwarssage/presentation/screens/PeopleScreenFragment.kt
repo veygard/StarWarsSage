@@ -3,24 +3,26 @@ package com.veygard.starwarssage.presentation.screens
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.github.terrakok.cicerone.Router
+import com.veygard.starwarssage.MainActivity
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenPeopleBinding
 import com.veygard.starwarssage.domain.model.Movie
 import com.veygard.starwarssage.presentation.navigation.Screens
+import com.veygard.starwarssage.presentation.supports.toggleSearchViewIconColor
+import com.veygard.starwarssage.presentation.supports.toggleVisibility
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.presentation.widgets.PersonListFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
-import com.veygard.starwarssage.presentation.supports.toggleSearchViewIconColor
-import com.veygard.starwarssage.presentation.supports.toggleVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -53,6 +55,7 @@ class PeopleScreenFragment : Fragment() {
         } ?: kotlin.run {
             router.navigateTo(Screens.errorScreen())
         }
+
     }
 
     override fun onCreateView(
@@ -76,14 +79,22 @@ class PeopleScreenFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         movie?.let { activity?.title = it.title }
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        setHasOptionsMenu(false)
     }
 
     private fun observeData() {
         viewModel.viewModelState.addObserver { result ->
             when (result) {
                 is SwViewModelState.GotMovie -> {
-
                     movie = result.movie
+                    activity?.title = result.movie.title
                     Log.e("PeopleScreenFragment", "SwViewModelState.GotMovie")
                     /* вызываем загрузку персонажей у этого фильма */
                     viewModel.getPeopleByMovie(result.movie)
@@ -156,6 +167,15 @@ class PeopleScreenFragment : Fragment() {
         _binding = null
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                (activity as? MainActivity)?.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
