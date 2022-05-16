@@ -76,11 +76,14 @@ class SwViewModel @Inject constructor(
 
     fun getPlanet(url: String) {
         viewModelScope.launch {
+            _loadingState.value = true
+            delay(1000) //показать CircularProgressIndicator
             _viewModelState.value = SwViewModelState.Loading
             val result = localUseCases.getLocalPlanetUseCase.start(url)
 
             result?.let {
                 _viewModelState.value = SwViewModelState.GotPlanet(it)
+                _loadingState.value = false
             } ?: kotlin.run {
                 getPlanetFromServer(url)
             }
@@ -296,19 +299,23 @@ class SwViewModel @Inject constructor(
                 val index = indexStr.toInt()
                 when (val result = networkUseCases.getPlanetUseCase.start(index)) {
                     is RequestResult.Success -> {
+                        _loadingState.value = false
                         val getPlanet = result.response as ApiResponseType.GetPlanet
                         _viewModelState.value = SwViewModelState.GotPlanet(getPlanet.planet)
                     }
 
                     is RequestResult.ConnectionError -> {
+                        _loadingState.value = false
                         _showToast.value = ToastTypes.ConnectionError
                     }
 
                     is RequestResult.ServerError -> {
+                        _loadingState.value = false
                         _showToast.value = ToastTypes.ServerError
                     }
                 }
             } catch (e: Exception) {
+                _loadingState.value = false
                 _showToast.value = ToastTypes.AppError
             }
         }

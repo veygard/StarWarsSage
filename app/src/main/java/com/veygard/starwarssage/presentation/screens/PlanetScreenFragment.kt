@@ -16,6 +16,7 @@ import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenPeopleBinding
 import com.veygard.starwarssage.databinding.FragmentScreenPlanetBinding
 import com.veygard.starwarssage.domain.model.Planet
+import com.veygard.starwarssage.presentation.supports.toggleVisibility
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
@@ -33,8 +34,6 @@ class PlanetScreenFragment : Fragment() {
 
     private val viewModel: SwViewModel by activityViewModels()
 
-    private var childFrManager: FragmentManager? = null
-
     @Inject
     lateinit var router: Router
 
@@ -45,7 +44,6 @@ class PlanetScreenFragment : Fragment() {
         arguments?.let {
             planetUrl = it.getString(PLANET_URL)
         }
-        planetUrl?.let { viewModel.getPlanet(it)}
     }
 
     override fun onCreateView(
@@ -53,15 +51,13 @@ class PlanetScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScreenPlanetBinding.inflate(inflater, container, false)
-        childFrManager= childFragmentManager
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
+        planetUrl?.let { viewModel.getPlanet(it)}
         observeData()
     }
 
@@ -95,8 +91,8 @@ class PlanetScreenFragment : Fragment() {
 
         viewModel.loadingState.addObserver { result ->
             when(result){
-                true -> {}
-                false -> {}
+                true ->  _binding?.let { toggleVisibility(false, binding.loadingBar)}
+                false -> _binding?.let { toggleVisibility(true, binding.loadingBar)}
             }
         }
     }
