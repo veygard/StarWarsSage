@@ -7,8 +7,6 @@ import com.veygard.starwarssage.domain.response.ApiResponseType
 import com.veygard.starwarssage.domain.response.RequestResult
 import com.veygard.starwarssage.domain.use_case.local.LocalUseCases
 import com.veygard.starwarssage.domain.use_case.network.NetworkUseCases
-import com.veygard.starwarssage.presentation.adapters.ClickInterface
-import com.veygard.starwarssage.presentation.adapters.MovieClickInterface
 import com.veygard.starwarssage.util.ToastTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -16,7 +14,6 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,6 +70,19 @@ class SwViewModel @Inject constructor(
                 Log.e("SwViewModel", "getMovie result")
             } ?: kotlin.run {
                 getMovieFromServer(url)
+            }
+        }
+    }
+
+    fun getPlanet(url: String) {
+        viewModelScope.launch {
+            _viewModelState.value = SwViewModelState.Loading
+            val result = localUseCases.getLocalPlanetUseCase.start(url)
+
+            result?.let {
+                _viewModelState.value = SwViewModelState.GotPlanet(it)
+            } ?: kotlin.run {
+                getPlanetFromServer(url)
             }
         }
     }
@@ -153,7 +163,10 @@ class SwViewModel @Inject constructor(
     fun cancelGetPeopleByMovieJob(from: String) {
         if (getPeopleByMovieJob.isActive) {
             getPeopleByMovieJob.cancel()
-            Log.e("SwViewModel", "cancelGetPeopleByMovieJob, active ${getPeopleByMovieJob.isActive}, from $from")
+            Log.e(
+                "SwViewModel",
+                "cancelGetPeopleByMovieJob, active ${getPeopleByMovieJob.isActive}, from $from"
+            )
         }
     }
 
@@ -276,26 +289,32 @@ class SwViewModel @Inject constructor(
         }
     }
 
-    fun getPlanet(index: Int) {
+    private fun getPlanetFromServer(url: String) {
         viewModelScope.launch {
-            when (val result = networkUseCases.getPlanetUseCase.start(index)) {
-                is RequestResult.Success -> {
-                    val getPlanet = result.response as ApiResponseType.GetPlanet
-                    _viewModelState.value = SwViewModelState.GotPlanet(getPlanet.planet)
-                }
+            try {
+                val indexStr = url.substringAfter("planets/").replace("/", "")
+                val index = indexStr.toInt()
+                when (val result = networkUseCases.getPlanetUseCase.start(index)) {
+                    is RequestResult.Success -> {
+                        val getPlanet = result.response as ApiResponseType.GetPlanet
+                        _viewModelState.value = SwViewModelState.GotPlanet(getPlanet.planet)
+                    }
 
-                is RequestResult.ConnectionError -> {
-                    _showToast.value = ToastTypes.ConnectionError
-                }
+                    is RequestResult.ConnectionError -> {
+                        _showToast.value = ToastTypes.ConnectionError
+                    }
 
-                is RequestResult.ServerError -> {
-                    _showToast.value = ToastTypes.ServerError
+                    is RequestResult.ServerError -> {
+                        _showToast.value = ToastTypes.ServerError
+                    }
                 }
+            } catch (e: Exception) {
+                _showToast.value = ToastTypes.AppError
             }
         }
     }
 
-    fun getPlanets() {
+    fun getPlanetsFromServer() {
         viewModelScope.launch {
             Log.e("bd_download", "get planets VM start")
             networkUseCases.getPlanetsUseCase.start()
@@ -308,13 +327,8 @@ class SwViewModel @Inject constructor(
         }
     }
 
-    fun getLocalPlanet(url: String) {
-        viewModelScope.launch {
-            localUseCases.getLocalPlanetUseCase.start(url)
-        }
-    }
 
-    fun getPeople() {
+    fun getPeopleFromServer() {
         viewModelScope.launch {
             Log.e("bd_download", "get people VM start")
             networkUseCases.getPeopleUseCase.start()

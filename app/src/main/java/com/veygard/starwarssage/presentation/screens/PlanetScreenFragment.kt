@@ -1,6 +1,7 @@
 package com.veygard.starwarssage.presentation.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +15,11 @@ import com.veygard.starwarssage.MainActivity
 import com.veygard.starwarssage.R
 import com.veygard.starwarssage.databinding.FragmentScreenPeopleBinding
 import com.veygard.starwarssage.databinding.FragmentScreenPlanetBinding
+import com.veygard.starwarssage.domain.model.Planet
 import com.veygard.starwarssage.presentation.viewmodels.SwViewModel
+import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
+import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
+import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
 import javax.inject.Inject
 
 private const val PLANET_URL = "planetUrl"
@@ -33,11 +38,14 @@ class PlanetScreenFragment : Fragment() {
     @Inject
     lateinit var router: Router
 
+    private var planet: Planet? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             planetUrl = it.getString(PLANET_URL)
         }
+        planetUrl?.let { viewModel.getPlanet(it)}
     }
 
     override fun onCreateView(
@@ -51,7 +59,10 @@ class PlanetScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.text.text = "Planet: $planetUrl"
+
+
+
+        observeData()
     }
 
     override fun onResume() {
@@ -70,6 +81,30 @@ class PlanetScreenFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
+    private fun observeData() {
+        viewModel.viewModelState.addObserver { result ->
+            when (result) {
+                is SwViewModelState.GotPlanet -> {
+                    planet = result.planet
+                    activity?.title = result.planet.name
+                    setFields()
+                }
+            }
+        }
+
+        viewModel.loadingState.addObserver { result ->
+            when(result){
+                true -> {}
+                false -> {}
+            }
+        }
+    }
+
+    private fun setFields() {
+    }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
