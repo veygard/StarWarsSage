@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -23,6 +24,8 @@ import com.veygard.starwarssage.presentation.viewmodels.SwViewModelState
 import com.veygard.starwarssage.presentation.widgets.NothingFoundFragment
 import com.veygard.starwarssage.presentation.widgets.PersonListFragment
 import com.veygard.starwarssage.presentation.widgets.ShimmerFragment
+import com.veygard.starwarssage.presentation.widgets.getToastFields
+import com.veygard.starwarssage.util.CustomToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,7 +34,7 @@ private const val MOVIE_URL = "movie_url"
 @AndroidEntryPoint
 class PeopleScreenFragment : Fragment() {
     private var movieUrl: String? = null
-
+    private var toast: CustomToast? = null
     private var _binding: FragmentScreenPeopleBinding? = null
     private val binding get() = _binding!!
 
@@ -98,13 +101,41 @@ class PeopleScreenFragment : Fragment() {
                     Log.e("PeopleScreenFragment", "SwViewModelState.GotMovie")
 
                     /* вызываем загрузку персонажей у этого фильма */
-                   viewModel.getPeopleByMovie(result.movie)
+                    viewModel.getPeopleByMovie(result.movie)
                 }
                 SwViewModelState.Loading -> setShimmerFragment()
                 SwViewModelState.NotFound -> setNothingFoundFragment()
-                SwViewModelState.GotPeopleByMovie -> setListFragment()
+                SwViewModelState.GotPeopleByMovie -> {
+                    setListFragment()
+                    toast?.cancel()
+                }
             }
+        }
 
+        viewModel.showToast.addObserver { result ->
+            result?.let {
+                val fields = getToastFields(it, activity?.applicationContext)
+                fields?.let {
+                    toast?.let {t ->
+                        toast!!.cancel()
+                        toast = CustomToast(requireContext(),
+                            message = fields.text,
+                            bgColor = fields.background,
+                            textColor = fields.textColor,
+                            dur = 500
+                        )
+                        toast!!.show()
+                    }?: kotlin.run {
+                        toast = CustomToast(requireContext(),
+                            message = fields.text,
+                            bgColor = fields.background,
+                            textColor = fields.textColor,
+                            dur = 500
+                        )
+                        toast!!.show()
+                    }
+                }
+            }
         }
     }
 
@@ -165,6 +196,8 @@ class PeopleScreenFragment : Fragment() {
         super.onDestroyView()
         viewModel.cancelGetPeopleByMovieJob("People fragment onDestroyView")
         activity?.title = ""
+        toast?.cancel()
+        toast=null
         _binding = null
     }
 

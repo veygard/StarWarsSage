@@ -130,11 +130,11 @@ class SwViewModel @Inject constructor(
             _viewModelState.value = SwViewModelState.Loading
             Log.e("SwViewModel", "getPeopleByMovie movie url: ${movie.url}")
             //получаем персонажей из бд или от сервера
-            val personList = mutableSetOf<Person>()
+            val personSet = mutableSetOf<Person>()
             movie.characters?.forEach { personUrl ->
                 val result = localUseCases.getLocalPersonUseCase.start(personUrl)
                 result?.let {
-                    personList.add(it)
+                    personSet.add(it)
                     Log.e("SwViewModel", "person local found: ${result.name}")
                 } ?: kotlin.run {
                     try {
@@ -142,10 +142,13 @@ class SwViewModel @Inject constructor(
                         val index = indexStr.toInt()
                         when (val serverResult = networkUseCases.getPersonUseCase.start(index)) {
                             is RequestResult.Success -> {
+
                                 (serverResult.response as ApiResponseType.GetPerson).person.let {
-                                    personList.add(it)
+                                    personSet.add(it)
+                                    _showToast.value = null
+                                    _showToast.value = ToastTypes.Download(current = personSet.size.toString(), all=movie.characters.size.toString())
                                 }
-                                Log.e("SwViewModel", "person server download: ${result?.name}")
+                                Log.e("SwViewModel", "person server download: ${serverResult.response.person.name}")
                             }
                             else -> {}
                         }
@@ -155,7 +158,7 @@ class SwViewModel @Inject constructor(
                 }
             }
             //показываем получившийся список
-            _peopleToShow.value = personList.toList()
+            _peopleToShow.value = personSet.toList()
             originalPersonList = _peopleToShow.value?.toList()
             _viewModelState.value = SwViewModelState.GotPeopleByMovie
             Log.e("SwViewModel", "getPeopleByMovie ended, ${_peopleToShow.value?.size}")
@@ -251,8 +254,8 @@ class SwViewModel @Inject constructor(
                         _viewModelState.value =
                             SwViewModelState.ServerError(RequestResult.NoMoviesError("don't have movies"))
                     }
-                    networkUseCases.getPeopleUseCase.start()
-                    networkUseCases.getPlanetsUseCase.start()
+//                    networkUseCases.getPeopleUseCase.start()
+//                    networkUseCases.getPlanetsUseCase.start()
                     Log.e("get_movies", "state ended ")
                 }
 

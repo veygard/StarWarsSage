@@ -25,5 +25,7 @@
     <string name="planet_terrain">"Ландшафт:"</string>
     <string name="planet_population">Численность населения:</string>
     <string name="planet_climate">Климат:</string>
-
+    <string name="snackbar_download_message">Загружаю персонажей с сервера. %1$s из %2$s</string>
+    <string name="snackbar_error_message">Не могу обновить данные.\nПроверь соединение с интернетом.</string>
+    <string name="snackbar_no_movies_message">В базе данных больше нет фильмов</string>
 </resources>
