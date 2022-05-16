@@ -63,7 +63,6 @@ class SwViewModel @Inject constructor(
         viewModelScope.launch {
             Log.e("SwViewModel", "getMovie start, url: $url")
 
-            _viewModelState.value = SwViewModelState.Loading
             val result = localUseCases.getLocalMovieUseCase.start(url)
             result?.let {
                 _viewModelState.value = SwViewModelState.GotMovie(it)
@@ -78,7 +77,6 @@ class SwViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingState.value = true
             delay(1000) //показать CircularProgressIndicator
-            _viewModelState.value = SwViewModelState.Loading
             val result = localUseCases.getLocalPlanetUseCase.start(url)
 
             result?.let {
@@ -127,6 +125,7 @@ class SwViewModel @Inject constructor(
 
     fun getPeopleByMovie(movie: Movie) {
         viewModelScope.launch(getPeopleByMovieJob) {
+            Log.e("SwViewModel", "getPeopleByMovie job state: ${getPeopleByMovieJob.isActive}")
             _peopleToShow.value = null
             _viewModelState.value = SwViewModelState.Loading
             Log.e("SwViewModel", "getPeopleByMovie movie url: ${movie.url}")
@@ -340,5 +339,9 @@ class SwViewModel @Inject constructor(
             Log.e("bd_download", "get people VM start")
             networkUseCases.getPeopleUseCase.start()
         }
+    }
+
+    fun clear(){
+        _viewModelState.value = null
     }
 }

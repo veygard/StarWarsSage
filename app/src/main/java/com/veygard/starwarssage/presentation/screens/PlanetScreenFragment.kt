@@ -76,6 +76,7 @@ class PlanetScreenFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        viewModel.clear()
     }
 
     private fun observeData() {

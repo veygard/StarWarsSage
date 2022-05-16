@@ -50,12 +50,6 @@ class PeopleScreenFragment : Fragment() {
         arguments?.let {
             movieUrl = it.getString(MOVIE_URL)
         }
-        movieUrl?.let {
-            viewModel.getMovie(it)
-        } ?: kotlin.run {
-            router.navigateTo(Screens.errorScreen())
-        }
-
     }
 
     override fun onCreateView(
@@ -71,6 +65,11 @@ class PeopleScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.e("PeopleScreenFragment", "movie url $movieUrl")
 
+        movieUrl?.let {
+           viewModel.getMovie(it)
+        } ?: kotlin.run {
+            router.navigateTo(Screens.errorScreen())
+        }
         observeData()
         searchViewListener()
         cancelButtonListener()
@@ -96,8 +95,9 @@ class PeopleScreenFragment : Fragment() {
                     movie = result.movie
                     activity?.title = result.movie.title
                     Log.e("PeopleScreenFragment", "SwViewModelState.GotMovie")
+
                     /* вызываем загрузку персонажей у этого фильма */
-                    viewModel.getPeopleByMovie(result.movie)
+                    if(viewModel.peopleToShow.value == null)viewModel.getPeopleByMovie(result.movie)
                 }
                 SwViewModelState.Loading -> setShimmerFragment()
                 SwViewModelState.NotFound -> setNothingFoundFragment()
@@ -180,6 +180,7 @@ class PeopleScreenFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        viewModel.clear()
     }
 
     companion object {
