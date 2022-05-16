@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_StarWarsSage)
         super.onCreate(savedInstanceState)
         title = getString(R.string.movies_fragment_title)
         setContentView(R.layout.activity_main)
