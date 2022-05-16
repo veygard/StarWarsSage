@@ -18,3 +18,10 @@
 ![zoom_image](https://user-images.githubusercontent.com/79571688/168627883-8f3c5337-6334-41b5-9156-743b082cdb57.gif)
 
 3. Переход на экран персонажей фильма, и отображение статуса загрузки в виде кастомных тостов:
+
+![people_download](https://user-images.githubusercontent.com/79571688/168629595-83a0f08d-bb61-47af-8de1-67c7e2d994c0.gif)
+
+4. После первоначальноя загрузки с сервера данные подтягиваются из локальной БД:
+
+![people_local](https://user-images.githubusercontent.com/79571688/168630140-fd19331f-36c4-465b-98b1-5d9b49e69ad6.gif)
+
