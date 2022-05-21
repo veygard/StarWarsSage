@@ -76,7 +76,7 @@ class SwViewModel @Inject constructor(
     fun getPlanet(url: String) {
         viewModelScope.launch {
             _loadingState.value = true
-            delay(1000) //показать CircularProgressIndicator
+            delay(2500) //показать CircularProgressIndicator
             val result = localUseCases.getLocalPlanetUseCase.start(url)
 
             result?.let {

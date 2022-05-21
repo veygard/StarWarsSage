@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import com.airbnb.lottie.LottieAnimationView
 import com.github.terrakok.cicerone.Router
 import com.veygard.starwarssage.MainActivity
 import com.veygard.starwarssage.R
@@ -36,11 +37,14 @@ class PlanetScreenFragment : Fragment() {
 
     private var planet: Planet? = null
 
+    private  var lottie: LottieAnimationView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             planetUrl = it.getString(PLANET_URL)
         }
+
     }
 
     override fun onCreateView(
@@ -56,6 +60,16 @@ class PlanetScreenFragment : Fragment() {
 
         planetUrl?.let { viewModel.getPlanet(it)}
         observeData()
+        initLottie()
+
+    }
+
+    private fun initLottie() {
+        lottie = _binding?.lottie
+        lottie?.apply {
+            speed= 4f
+            repeatCount= 99
+        }
     }
 
     override fun onResume() {
@@ -91,8 +105,11 @@ class PlanetScreenFragment : Fragment() {
 
         viewModel.loadingState.addObserver { result ->
             when(result){
-                true ->  _binding?.let { toggleVisibility(false, binding.loadingBar)}
-                false -> _binding?.let { toggleVisibility(true, binding.loadingBar)}
+                true ->  _binding?.let { lottie?.playAnimation()}
+                false -> _binding?.let {
+                    lottie?.cancelAnimation()
+                    lottie?.visibility = View.GONE
+                }
             }
         }
     }
