@@ -72,7 +72,6 @@ class PeopleScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("PeopleScreenFragment", "movie url $movieUrl")
-
         observeData()
         searchViewListener()
         cancelButtonListener()

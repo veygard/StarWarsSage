@@ -10,8 +10,12 @@
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/bg_grey_rounded.xml" value="0.1875" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/bg_rounded.xml" value="0.1095" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1155" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/ic_logo_for_anim.xml" value="0.1105" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/ic_splash.xml" value="0.1" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/ic_splashscreen_logo_animated.xml" value="0.1105" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/none.xml" value="0.1095" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/splash.xml" value="0.1105" />
+        <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/drawable/splash_screen.xml" value="0.1105" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/custom_toast.xml" value="0.20972644376899696" />
         <entry key="..\:/_AndroidStudioProjects/_pet/star_wars_sage/app/src/main/res/layout/fragment_error.xml" value="0.18704710144927536" />

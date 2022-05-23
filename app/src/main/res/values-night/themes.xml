@@ -37,9 +37,4 @@
         <item name="colorPrimary">@android:color/transparent</item>
     </style>
 
-    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowBackground">@drawable/ic_splash</item>
-        <item name="android:statusBarColor">@color/actionBarText</item>
-    </style>
-
 </resources>

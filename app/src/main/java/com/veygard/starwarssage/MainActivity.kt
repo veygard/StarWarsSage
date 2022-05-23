@@ -1,9 +1,8 @@
 package com.veygard.starwarssage
 
-import android.app.PendingIntent.getActivity
 import android.os.Bundle
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.github.terrakok.cicerone.Command
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -28,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_StarWarsSage)
         super.onCreate(savedInstanceState)
         title = getString(R.string.movies_fragment_title)
+        installSplashScreen()
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
